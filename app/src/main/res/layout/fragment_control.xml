@@ -98,25 +98,21 @@
         app:layout_constraintStart_toEndOf="@+id/down_arrow_image"
         app:layout_constraintTop_toBottomOf="@+id/right_arrow_image" />
 
-    <LinearLayout
-        android:id="@+id/additional_linear_layout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_bottom"
-        app:layout_constraintVertical_bias="0.483">
+        tools:context=".ui.control.ControlFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/additional_horizontal_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:scrollbars="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_gravity="center"/>
-    </LinearLayout>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

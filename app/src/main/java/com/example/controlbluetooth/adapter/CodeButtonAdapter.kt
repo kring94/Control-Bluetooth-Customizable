@@ -8,9 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
+import com.example.controlbluetooth.const.Layout
 import com.example.controlbluetooth.data.DataSource
 
-class CodeButtonAdapter(private val  context: Context?): RecyclerView.Adapter<CodeButtonAdapter.CodeButtonViewHolder>() {
+class CodeButtonAdapter(private val  context: Context?,
+    private val layout: Int): RecyclerView.Adapter<CodeButtonAdapter.CodeButtonViewHolder>() {
 
     private val dataCodeButton = DataSource.codeButton
 
@@ -29,8 +31,14 @@ class CodeButtonAdapter(private val  context: Context?): RecyclerView.Adapter<Co
     override fun onBindViewHolder(holder: CodeButtonViewHolder, position: Int) {
         val codeButton = dataCodeButton[position]
 
-        holder.buttonImage.setImageResource(codeButton.imageButton)
-        holder.codeButtonText.text = codeButton.codeButtonText
+        when(layout){
+            1 -> holder.buttonImage.setImageResource(codeButton.imageButton)
+            2 -> {
+                holder.buttonImage.setImageResource(codeButton.imageButton)
+                holder.codeButtonText.text = codeButton.codeButtonText
+            }
+        }
+
     }
 
     override fun getItemCount(): Int = DataSource.codeButton.size
