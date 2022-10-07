@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/controlFragment">
+    app:startDestination="@id/navigation_control">
 
     <fragment
-        android:id="@+id/controlFragment"
+        android:id="@+id/navigation_control"
         android:name="com.example.controlbluetooth.ui.control.ControlFragment"
         android:label="fragment_control"
         tools:layout="@layout/fragment_control" />
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/navigation_settings"
         android:name="com.example.controlbluetooth.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/bluetoothFragment"
+        android:id="@+id/navigation_bluetooth"
         android:name="com.example.controlbluetooth.ui.bluetooth.BluetoothFragment"
         android:label="fragment_bluetooth"
         tools:layout="@layout/fragment_bluetooth" />
