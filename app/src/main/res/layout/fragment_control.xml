@@ -11,7 +11,7 @@
         android:id="@+id/central_arrow_image_conf"
         android:layout_width="@dimen/buttons_dimens"
         android:layout_height="@dimen/buttons_dimens"
-        android:src="@drawable/center"
+        android:src="@drawable/central"
         app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
