@@ -2,4 +2,5 @@
 <resources>
     <dimen name="padding_large">24dp</dimen>
     <dimen name="buttons_dimens">100dp</dimen>
+    <dimen name="codes_dimens">20sp</dimen>
 </resources>

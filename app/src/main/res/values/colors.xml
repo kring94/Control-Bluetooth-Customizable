@@ -9,5 +9,7 @@
     <color name="secondary">#ff205107</color>
     <color name="secondary_dark">#ff0c3900</color>
     <color name="secondary_light">#ff9cd67e</color>
+<!--    CODEs color-->
+    <color name="codes">#FF393839</color>
 
 </resources>
