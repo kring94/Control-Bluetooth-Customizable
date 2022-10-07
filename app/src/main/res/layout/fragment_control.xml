@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.control.ControlFragment">
+
+
+    <ImageView
+        android:id="@+id/central_arrow_image_conf"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="550dp" />
+
+    <ImageView
+        android:id="@+id/down_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:layout_marginTop="@dimen/padding_large"
+        android:src="@drawable/down_arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/central_arrow_image_conf" />
+
+    <ImageView
+        android:id="@+id/right_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/right_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/central_arrow_image_conf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/central_arrow_image_conf" />
+
+    <ImageView
+        android:id="@+id/left_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/left_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/central_arrow_image_conf"
+        app:layout_constraintEnd_toStartOf="@+id/central_arrow_image_conf"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/up_arrow_image_conf"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:src="@drawable/up_arrow"
+        app:layout_constraintBottom_toTopOf="@+id/central_arrow_image_conf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/upright_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/right_up_arrow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/right_arrow_image"
+        app:layout_constraintStart_toEndOf="@+id/up_arrow_image_conf" />
+
+    <ImageView
+        android:id="@+id/upleft_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/left_up_arrow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/left_arrow_image"
+        app:layout_constraintEnd_toStartOf="@+id/up_arrow_image_conf" />
+
+    <ImageView
+        android:id="@+id/downleft_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/left_down_arrow"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/down_arrow_image"
+        app:layout_constraintTop_toBottomOf="@+id/left_arrow_image" />
+
+    <ImageView
+        android:id="@+id/downright_arrow_image"
+        android:layout_width="@dimen/buttons_dimens"
+        android:layout_height="@dimen/buttons_dimens"
+        android:src="@drawable/right_down_arrow"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/down_arrow_image"
+        app:layout_constraintTop_toBottomOf="@+id/right_arrow_image" />
+
+    <LinearLayout
+        android:id="@+id/additional_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_bottom"
+        app:layout_constraintVertical_bias="0.483">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/additional_horizontal_rv"
+            android:orientation="horizontal"
+            android:scrollbars="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
