@@ -99,15 +99,12 @@
         app:layout_constraintTop_toBottomOf="@+id/right_arrow_image_conf" />
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/plus_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline_bottom_conf"
-        app:layout_constraintVertical_bias="0.483">
+        app:layout_constraintTop_toTopOf="@+id/guideline_bottom_conf">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/additional_horizontal_conf_rv"
@@ -115,8 +112,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:scrollbars="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/addittional_list_item" />
     </FrameLayout>
 
     <TextView
@@ -205,4 +202,23 @@
         app:layout_constraintBottom_toBottomOf="@+id/downright_arrow_image_conf"
         app:layout_constraintEnd_toEndOf="@+id/downright_arrow_image_conf"
         tools:text="H" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/plus_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        app:cardMaxElevation="4dp"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_bottom_conf">
+
+        <ImageView
+
+            android:layout_width="75dp"
+            android:layout_height="@dimen/buttons_dimens"
+            android:src="@drawable/plus"
+             />
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

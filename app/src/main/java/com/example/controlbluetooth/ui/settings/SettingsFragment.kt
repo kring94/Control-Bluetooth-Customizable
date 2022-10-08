@@ -1,16 +1,14 @@
 package com.example.controlbluetooth.ui.settings
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.controlbluetooth.R
 import com.example.controlbluetooth.adapter.CodeButtonAdapter
 import com.example.controlbluetooth.const.Layout
-import com.example.controlbluetooth.databinding.FragmentBluetoothBinding
 import com.example.controlbluetooth.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -30,7 +28,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.additionalHorizontalConfRv
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = CodeButtonAdapter(requireContext(),Layout.SETTINGS)
 
 

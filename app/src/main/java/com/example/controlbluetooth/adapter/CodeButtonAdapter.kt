@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
-import com.example.controlbluetooth.const.Layout
 import com.example.controlbluetooth.data.DataSource
 
 class CodeButtonAdapter(private val  context: Context?,
