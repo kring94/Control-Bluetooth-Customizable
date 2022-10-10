@@ -164,8 +164,6 @@
         <TextView
             android:id="@+id/center_code_text"
             style="@style/codes_styles"
-            android:background="#A6A6A6"
-            android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/central_arrow_image_conf"
             app:layout_constraintEnd_toEndOf="@+id/central_arrow_image_conf"
             app:layout_constraintStart_toStartOf="@+id/central_arrow_image_conf"

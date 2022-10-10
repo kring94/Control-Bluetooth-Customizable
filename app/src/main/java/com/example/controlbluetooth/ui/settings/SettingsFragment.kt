@@ -30,34 +30,58 @@ class SettingsFragment : Fragment() {
 
     private val viewModel: ControlViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return  root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.additionalHorizontalConfRv
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = CodeButtonAdapter(requireContext(),Layout.SETTINGS)
-        binding.modeSwitch.text = getString(R.string.simple_mode_switch)
+
         binding.modeSwitch.setOnClickListener {
             isChecked()
         }
+
+        // Vinculación de vistas directas  [Se requiere mejorar e implementarse en el viewModel]
+        binding.apply {
+            modeSwitch.text = getString(R.string.simple_mode_switch)
+            leftCodeText.text = viewModel.staticCodes[0].codes
+            upCodeText.text = viewModel.staticCodes[1].codes
+            rightCodeText.text = viewModel.staticCodes[2].codes
+            downCodeText.text = viewModel.staticCodes[3].codes
+            centerCodeText.text = viewModel.staticCodes[8].codes
+
+            upleftCodeText.text = viewModel.staticCodes[4].codes
+            uprightCodeText.text = viewModel.staticCodes[5].codes
+            downleftCodeText.text = viewModel.staticCodes[6].codes
+            downrightCodeText.text = viewModel.staticCodes[7].codes
+        }
+
+        // Observador del Switch para cambio de modo
         viewModel.isChecked.observe(viewLifecycleOwner) { state ->
-            binding.modeSwitch.isChecked = state
             binding.apply {
+                modeSwitch.isChecked = state
                 downleftArrowImageConf.isVisible = state
                 downrightArrowImageConf.isVisible = state
                 upleftArrowImageConf.isVisible = state
                 uprightArrowImageConf.isVisible = state
-            }
-            if (state){
-                binding.modeSwitch.text = getString(R.string.full_mode_switch)
-            }else{
-                binding.modeSwitch.text = getString(R.string.simple_mode_switch)
+
+                upleftCodeText.isVisible = state
+                uprightCodeText.isVisible = state
+                downleftCodeText.isVisible = state
+                downrightCodeText.isVisible = state
+                if(state){
+                    modeSwitch.text = getString(R.string.full_mode_switch)
+                } else {
+                    modeSwitch.text = getString(R.string.simple_mode_switch)
+                }
+
             }
         }
 

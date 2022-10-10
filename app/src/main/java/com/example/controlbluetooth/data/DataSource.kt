@@ -2,27 +2,29 @@ package com.example.controlbluetooth.data
 
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.model.CodeButton
+import com.example.controlbluetooth.model.StaticCodes
 
 object DataSource {
-//    val codes: List<Codes> = listOf(
-//        Codes("A"),
-//        Codes("B"),
-//        Codes("C"),
-//        Codes("D"),
-//        Codes("E"),
-//        Codes("G"),
-//        Codes("H"),
-//        Codes("Z")
-//    )
+    val staticCodes: List<StaticCodes> = listOf(
+        StaticCodes("A"),
+        StaticCodes("B"),
+        StaticCodes("C"),
+        StaticCodes("D"),
+        StaticCodes("E"),
+        StaticCodes("G"),
+        StaticCodes("H"),
+        StaticCodes("I"),
+        StaticCodes("Z")
+    )
 
     val codeButton: List<CodeButton> = listOf(
-        CodeButton("I",
-        R.drawable.spam_button),
         CodeButton("J",
         R.drawable.spam_button),
         CodeButton("K",
         R.drawable.spam_button),
         CodeButton("L",
+        R.drawable.spam_button),
+        CodeButton("M",
         R.drawable.spam_button)
     )
 }
