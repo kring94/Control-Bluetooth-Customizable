@@ -8,5 +8,7 @@
 
     <string name="central_button_desc">Central button</string>
     <string name="plus_button_desc">Plus button</string>
-
+    <string name="full_mode_switch">Full Mode</string>
+    <string name="simple_mode_switch">Simple Mode</string>
+    <string name="mm">Full mode</string>
 </resources>
