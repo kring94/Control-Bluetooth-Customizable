@@ -14,10 +14,28 @@
         android:id="@+id/navigation_settings"
         android:name="com.example.controlbluetooth.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_navigation_settings_to_selectButtonFragment"
+            app:destination="@id/selectButtonFragment"
+            app:popUpTo="@id/navigation_settings"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_bluetooth"
         android:name="com.example.controlbluetooth.ui.bluetooth.BluetoothFragment"
         android:label="fragment_bluetooth"
         tools:layout="@layout/fragment_bluetooth" />
+    <fragment
+        android:id="@+id/selectButtonFragment"
+        android:name="com.example.controlbluetooth.ui.settings.SelectButtonFragment"
+        android:label="fragment_select_button"
+        tools:layout="@layout/fragment_select_button" >
+        <action
+            android:id="@+id/action_selectButtonFragment_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+        <argument
+            android:name="buttonSelectedKey"
+            app:argType="integer" />
+    </fragment>
 </navigation>

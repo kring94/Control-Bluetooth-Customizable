@@ -225,7 +225,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline_bottom_conf">
 
             <ImageView
-                android:id="@+id/plus_image"
+                android:id="@+id/plus_button_image"
                 android:layout_width="75dp"
                 android:layout_height="@dimen/buttons_dimens"
                 android:src="@drawable/plus" />

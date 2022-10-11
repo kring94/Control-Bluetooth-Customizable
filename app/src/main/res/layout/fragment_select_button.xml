@@ -103,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_large"
         android:fontFamily="@font/roboto"
+        android:text="@string/title_select_button"
         android:textSize="@dimen/title_dimens"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

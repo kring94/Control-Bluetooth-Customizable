@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
@@ -85,12 +86,21 @@ class SettingsFragment : Fragment() {
             }
         }
 
-    }
+        binding.plusButtonImage.setOnClickListener {
+            selectButton()
+        }
 
+    }
+    //Función de ejecución del cambio en el switch
     private fun isChecked(){
         val isChecked = binding.modeSwitch.isChecked
         viewModel.isCheckedFun(isChecked)
     }
+    //Función de navegación al fragmento de selección de boton personalizable
+    fun selectButton(){
+        findNavController().navigate(R.id.action_navigation_settings_to_selectButtonFragment)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

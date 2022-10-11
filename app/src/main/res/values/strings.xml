@@ -10,5 +10,5 @@
     <string name="plus_button_desc">Plus button</string>
     <string name="full_mode_switch">Full Mode</string>
     <string name="simple_mode_switch">Simple Mode</string>
-    <string name="mm">Full mode</string>
+    <string name="title_select_button">Select your new custom button</string>
 </resources>
