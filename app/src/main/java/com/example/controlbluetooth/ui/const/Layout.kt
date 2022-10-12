@@ -1,4 +1,4 @@
-package com.example.controlbluetooth.const
+package com.example.controlbluetooth.ui.const
 
 object Layout {
     const val CONTROL = 1

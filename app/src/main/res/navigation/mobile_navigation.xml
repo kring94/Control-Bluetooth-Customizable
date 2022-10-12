@@ -33,7 +33,9 @@
         tools:layout="@layout/fragment_select_button" >
         <action
             android:id="@+id/action_selectButtonFragment_to_navigation_settings"
-            app:destination="@id/navigation_settings" />
+            app:destination="@id/navigation_settings"
+            app:popUpTo="@id/navigation_control"
+            app:popUpToInclusive="false" />
         <argument
             android:name="buttonSelectedKey"
             app:argType="integer" />

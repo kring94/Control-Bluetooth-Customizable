@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
+import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 
 class SelectButtonFragment : Fragment() {
@@ -16,7 +18,14 @@ class SelectButtonFragment : Fragment() {
     private var _binding: FragmentSelectButtonBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ControlViewModel by activityViewModels()
+    //private val viewModel: ControlViewModel by activityViewModels()
+
+    private val viewModel: ControlViewModel by activityViewModels {
+        ControlViewModelFactory(
+            (activity?.application as ControlApplication).database.codesDao()
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +49,7 @@ class SelectButtonFragment : Fragment() {
             optionNineImage.setOnClickListener { selectedButton(9) }
         }
     }
-
+//    val args = SelectButtonFragmentArgs.fromBundle(requireArguments())
     fun selectedButton(id: Int){
         viewModel.addButton(id)
         findNavController().navigate(SelectButtonFragmentDirections.actionSelectButtonFragmentToNavigationSettings())

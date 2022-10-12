@@ -1,4 +1,4 @@
-package com.example.controlbluetooth.adapter
+package com.example.controlbluetooth.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

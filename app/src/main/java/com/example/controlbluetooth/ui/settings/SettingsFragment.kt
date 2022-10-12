@@ -11,10 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
-import com.example.controlbluetooth.adapter.CodeButtonAdapter
-import com.example.controlbluetooth.const.Layout
 import com.example.controlbluetooth.databinding.FragmentSettingsBinding
+import com.example.controlbluetooth.ui.ControlApplication
+import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
+import com.example.controlbluetooth.ui.const.Layout
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 class SettingsFragment : Fragment() {
 
@@ -23,13 +25,13 @@ class SettingsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
-//    private val viewModel: ControlViewModel by activityViewModels {
-//        ControlViewModelFactory(
-//            (activity?.application as ControlApplication).database.codesDao()
-//        )
-//    }
+    private val viewModel: ControlViewModel by activityViewModels {
+        ControlViewModelFactory(
+            (activity?.application as ControlApplication).database.codesDao()
+        )
+    }
 
-    private val viewModel: ControlViewModel by activityViewModels()
+    //private val viewModel: ControlViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +45,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.additionalHorizontalConfRv
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        recyclerView.adapter = CodeButtonAdapter(requireContext(),Layout.SETTINGS)
+        recyclerView.adapter = CodeButtonAdapter(requireContext(), Layout.SETTINGS)
 
         binding.modeSwitch.setOnClickListener {
             isChecked()
