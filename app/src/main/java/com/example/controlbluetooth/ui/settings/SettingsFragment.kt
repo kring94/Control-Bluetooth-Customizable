@@ -97,7 +97,7 @@ class SettingsFragment : Fragment() {
         viewModel.isCheckedFun(isChecked)
     }
     //Función de navegación al fragmento de selección de boton personalizable
-    fun selectButton(){
+    private fun selectButton(){
         findNavController().navigate(R.id.action_navigation_settings_to_selectButtonFragment)
     }
 
