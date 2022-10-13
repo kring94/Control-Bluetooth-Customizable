@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 
 //private val codesDao: CodesDao
-class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
+class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
 
     val staticCodes: List<StaticCodes> = DataSource.staticCodes
     private val addCodeButton = DataSource.codeButton
@@ -21,8 +21,8 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
     val isChecked: LiveData<Boolean>
         get() = _isChecked
 
-    fun addButton(id: Int, code: String){
-        when(id) {
+    fun addButton(id: Int, code: String) {
+        when (id) {
             1 -> addCodeButton.add(CodeButton(code, R.drawable.uno))
             2 -> addCodeButton.add(CodeButton(code, R.drawable.dos))
             3 -> addCodeButton.add(CodeButton(code, R.drawable.tres))
@@ -33,11 +33,9 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
             8 -> addCodeButton.add(CodeButton(code, R.drawable.ocho))
             9 -> addCodeButton.add(CodeButton(code, R.drawable.nueve))
         }
-
     }
 
     // Función para cambio de imagen a una de configuración
-
     private var _imageCodes = mutableListOf(
         R.drawable.uno,
         R.drawable.dos,
@@ -49,6 +47,7 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
         R.drawable.ocho,
         R.drawable.nueve
     )
+
     val imageCodes: List<Int> get() = _imageCodes
 
     // Función para deshabilitar imagen
@@ -106,53 +105,51 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
         }
     }
 
-
-
-
     // Función de asignación de cambio del switch
-    fun isCheckedFun(checked: Boolean){
+    fun isCheckedFun(checked: Boolean) {
         _isChecked.value = checked
     }
 
-    // ########  Inicio de implementación ROOM ########
+    // TODO Inicio de implementación ROOM ########
 
     // Lista observable para la recuperación de todos los códigos y botones
     val allCodes: LiveData<List<Codes>> = codesDao.getCodes().asLiveData()
+
     // Función de recuperación de un código y botón especifico
-    fun getCode(id: Int): LiveData<Codes>{
+    fun getCode(id: Int): LiveData<Codes> {
         return codesDao.getCode(id).asLiveData()
     }
 
     // Función base para insertar códigos y botones
-    private fun insertCodeButton(code: Codes){
+    private fun insertCodeButton(code: Codes) {
         viewModelScope.launch {
             codesDao.insert(code)
         }
     }
 
     // Función base para la actualización de un código
-    private fun updateCode(code: Codes){
+    private fun updateCode(code: Codes) {
         viewModelScope.launch {
             codesDao.update(code)
         }
     }
 
     // Función base para la eliminación de un código
-    private fun deleteCode(code: Codes){
+    private fun deleteCode(code: Codes) {
         viewModelScope.launch {
             codesDao.delete(code)
         }
     }
 
     // Funciones para agregra un nuevo código
-    private fun getNewCodeEntry(codeButton: String, codeImage: String): Codes{
+    private fun getNewCodeEntry(codeButton: String, codeImage: Int): Codes {
         return Codes(
             codeButton = codeButton,
             codeImage = codeImage
         )
     }
 
-    fun addNewCode(codeButton: String, codeImage: String){
+    fun addNewCode(codeButton: String, codeImage: Int) {
         val newCode = getNewCodeEntry(codeButton, codeImage)
         insertCodeButton(newCode)
     }
@@ -165,8 +162,8 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
     }
 
     // Función de actualización de código en el botón
-    fun editCode(code: Codes){
-        if(isEntryValid("w")){
+    fun editCode(code: Codes) {
+        if (isEntryValid("w")) {
             val newCode = code.copy(codeButton = code.codeButton)
             updateCode(newCode)
         }

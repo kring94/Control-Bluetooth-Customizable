@@ -11,5 +11,5 @@ data class Codes(
     @ColumnInfo(name = "code_button")
     val codeButton: String,
     @ColumnInfo(name = "code_image")
-    val codeImage: String
+    val codeImage: Int
     )

@@ -68,6 +68,7 @@ class AddCodeDialog(private val idCode: Int) : DialogFragment() {
             val text = "No se permite dejar vacia la entrada del código de asignación del botón"
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {
+            viewModel.addNewCode(code, idCode)
             viewModel.addButton(idCode, code)
             viewModel.changeImageConf(idCode)
             findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)

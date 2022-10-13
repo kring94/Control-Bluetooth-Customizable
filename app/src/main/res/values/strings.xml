@@ -11,7 +11,7 @@
     <string name="full_mode_switch">Full Mode</string>
     <string name="simple_mode_switch">Simple Mode</string>
     <string name="title_select_button">Select your new custom button</string>
-    <string name="new_code">Add code for new button</string>
+    <string name="new_code">Add code for new button<font color='#FF0000'>*</font></string>
     <string name="add">Add code</string>
     <string name="cancel">Cancel</string>
 </resources>
