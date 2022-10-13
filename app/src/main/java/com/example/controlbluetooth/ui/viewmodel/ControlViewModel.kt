@@ -1,5 +1,6 @@
 package com.example.controlbluetooth.ui.viewmodel
 
+import android.widget.ImageView
 import androidx.lifecycle.*
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.CodesDao
@@ -21,19 +22,41 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
     val isChecked: LiveData<Boolean>
         get() = _isChecked
 
-    fun addButton(id: Int){
+    fun addButton(id: Int, code: String){
         when(id) {
-            1 -> addCodeButton.add(CodeButton("J", R.drawable.uno))
-            2 -> addCodeButton.add(CodeButton("K", R.drawable.dos))
-            3 -> addCodeButton.add(CodeButton("L", R.drawable.tres))
-            4 -> addCodeButton.add(CodeButton("M", R.drawable.cuatro))
-            5 -> addCodeButton.add(CodeButton("N", R.drawable.cinco))
-            6 -> addCodeButton.add(CodeButton("O", R.drawable.seis))
-            7 -> addCodeButton.add(CodeButton("P", R.drawable.siete))
-            8 -> addCodeButton.add(CodeButton("Q", R.drawable.ocho))
-            9 -> addCodeButton.add(CodeButton("Q", R.drawable.nueve))
+            1 -> addCodeButton.add(CodeButton(code, R.drawable.uno))
+            2 -> addCodeButton.add(CodeButton(code, R.drawable.dos))
+            3 -> addCodeButton.add(CodeButton(code, R.drawable.tres))
+            4 -> addCodeButton.add(CodeButton(code, R.drawable.cuatro))
+            5 -> addCodeButton.add(CodeButton(code, R.drawable.cinco))
+            6 -> addCodeButton.add(CodeButton(code, R.drawable.seis))
+            7 -> addCodeButton.add(CodeButton(code, R.drawable.siete))
+            8 -> addCodeButton.add(CodeButton(code, R.drawable.ocho))
+            9 -> addCodeButton.add(CodeButton(code, R.drawable.nueve))
         }
+
     }
+
+    // Función para cambio de imagene a una de configuración
+
+    fun changeImageConf(idImage:Int, change: Boolean, imageView: ImageView){
+        if (change) {
+            imageView.isEnabled = false
+            when (idImage) {
+                1 -> imageView.setImageResource(R.drawable.uno_conf)
+                2 -> imageView.setImageResource(R.drawable.dos_conf)
+                3 -> imageView.setImageResource(R.drawable.tres_conf)
+                4 -> imageView.setImageResource(R.drawable.cuatro_conf)
+                5 -> imageView.setImageResource(R.drawable.cinco_conf)
+                6 -> imageView.setImageResource(R.drawable.seis_conf)
+                7 -> imageView.setImageResource(R.drawable.siete_conf)
+                8 -> imageView.setImageResource(R.drawable.ocho_conf)
+                9 -> imageView.setImageResource(R.drawable.nueve_conf)
+            }
+        }
+
+    }
+
 
     // Función de asignación de cambio del switch
     fun isCheckedFun(checked: Boolean){

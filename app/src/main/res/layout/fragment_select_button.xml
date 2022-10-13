@@ -40,6 +40,7 @@
             android:layout_width="@dimen/buttons_dimens"
             android:layout_height="@dimen/buttons_dimens"
             android:layout_marginStart="@dimen/padding_large"
+            android:saveEnabled="false"
             android:src="@drawable/tres"
             app:layout_constraintBottom_toBottomOf="@+id/option_two_image"
             app:layout_constraintStart_toEndOf="@+id/option_two_image"
