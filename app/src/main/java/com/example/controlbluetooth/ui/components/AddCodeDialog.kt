@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -17,7 +16,7 @@ import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 
-class AddCodeDialog(private val idCode: Int, private val imageView: ImageView) : DialogFragment() {
+class AddCodeDialog(private val idCode: Int) : DialogFragment() {
 
     private var _binding: FragmentAddCodeDialogBinding? = null
     private val binding get() = _binding!!
@@ -70,7 +69,7 @@ class AddCodeDialog(private val idCode: Int, private val imageView: ImageView) :
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {
             viewModel.addButton(idCode, code)
-            viewModel.changeImageConf(idCode,true, imageView)
+            viewModel.changeImageConf(idCode)
             findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)
 
         }

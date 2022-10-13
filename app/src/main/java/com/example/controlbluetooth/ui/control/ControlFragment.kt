@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.databinding.FragmentControlBinding
 import com.example.controlbluetooth.ui.ControlApplication
@@ -42,7 +42,7 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.additionalHorizontalRv
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(),3)
         recyclerView.adapter = CodeButtonAdapter(requireContext(), Layout.CONTROL)
 
         isChecked()

@@ -1,6 +1,5 @@
 package com.example.controlbluetooth.ui.viewmodel
 
-import android.widget.ImageView
 import androidx.lifecycle.*
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.CodesDao
@@ -37,25 +36,77 @@ class ControlViewModel(private val codesDao: CodesDao): ViewModel() {
 
     }
 
-    // Función para cambio de imagene a una de configuración
+    // Función para cambio de imagen a una de configuración
 
-    fun changeImageConf(idImage:Int, change: Boolean, imageView: ImageView){
-        if (change) {
-            imageView.isEnabled = false
-            when (idImage) {
-                1 -> imageView.setImageResource(R.drawable.uno_conf)
-                2 -> imageView.setImageResource(R.drawable.dos_conf)
-                3 -> imageView.setImageResource(R.drawable.tres_conf)
-                4 -> imageView.setImageResource(R.drawable.cuatro_conf)
-                5 -> imageView.setImageResource(R.drawable.cinco_conf)
-                6 -> imageView.setImageResource(R.drawable.seis_conf)
-                7 -> imageView.setImageResource(R.drawable.siete_conf)
-                8 -> imageView.setImageResource(R.drawable.ocho_conf)
-                9 -> imageView.setImageResource(R.drawable.nueve_conf)
+    private var _imageCodes = mutableListOf(
+        R.drawable.uno,
+        R.drawable.dos,
+        R.drawable.tres,
+        R.drawable.cuatro,
+        R.drawable.cinco,
+        R.drawable.seis,
+        R.drawable.siete,
+        R.drawable.ocho,
+        R.drawable.nueve
+    )
+    val imageCodes: List<Int> get() = _imageCodes
+
+    // Función para deshabilitar imagen
+    private var _imageCodesEnabled = mutableListOf(
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+    )
+    val imageCodesEnabled: List<Boolean> get() = _imageCodesEnabled
+
+    fun changeImageConf(idImage: Int) {
+        when (idImage) {
+            1 -> {
+                _imageCodes[0] = R.drawable.uno_conf
+                _imageCodesEnabled[0] = false
+            }
+            2 -> {
+                _imageCodes[1] = R.drawable.dos_conf
+                _imageCodesEnabled[1] = false
+            }
+            3 -> {
+                _imageCodes[2] = R.drawable.tres_conf
+                _imageCodesEnabled[2] = false
+            }
+            4 -> {
+                _imageCodes[3] = R.drawable.cuatro_conf
+                _imageCodesEnabled[3] = false
+            }
+            5 -> {
+                _imageCodes[4] = R.drawable.cinco_conf
+                _imageCodesEnabled[4] = false
+            }
+            6 -> {
+                _imageCodes[5] = R.drawable.seis_conf
+                _imageCodesEnabled[5] = false
+            }
+            7 -> {
+                _imageCodes[6] = R.drawable.siete_conf
+                _imageCodesEnabled[6] = false
+            }
+            8 -> {
+                _imageCodes[7] = R.drawable.ocho_conf
+                _imageCodesEnabled[7] = false
+            }
+            9 -> {
+                _imageCodes[8] = R.drawable.nueve_conf
+                _imageCodesEnabled[8] = false
             }
         }
-
     }
+
+
 
 
     // Función de asignación de cambio del switch

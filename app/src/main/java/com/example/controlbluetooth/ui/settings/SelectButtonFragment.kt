@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
@@ -36,22 +35,42 @@ class SelectButtonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {
-            optionOneImage.setOnClickListener { addSelectedButton(1, optionOneImage) }
-            optionTwoImage.setOnClickListener { addSelectedButton(2, optionTwoImage) }
-            optionThreeImage.setOnClickListener { addSelectedButton(3, optionThreeImage) }
-            optionFourImage.setOnClickListener { addSelectedButton(4, optionFourImage) }
-            optionFiveImage.setOnClickListener { addSelectedButton(5, optionFiveImage) }
-            optionSixImage.setOnClickListener { addSelectedButton(6, optionSixImage) }
-            optionSevenImage.setOnClickListener { addSelectedButton(7, optionSevenImage) }
-            optionEightImage.setOnClickListener { addSelectedButton(8, optionEightImage) }
-            optionNineImage.setOnClickListener { addSelectedButton(9, optionNineImage) }
+            optionOneImage.setImageResource(viewModel.imageCodes[0])
+            optionTwoImage.setImageResource(viewModel.imageCodes[1])
+            optionThreeImage.setImageResource(viewModel.imageCodes[2])
+            optionFourImage.setImageResource(viewModel.imageCodes[3])
+            optionFiveImage.setImageResource(viewModel.imageCodes[4])
+            optionSixImage.setImageResource(viewModel.imageCodes[5])
+            optionSevenImage.setImageResource(viewModel.imageCodes[6])
+            optionEightImage.setImageResource(viewModel.imageCodes[7])
+            optionNineImage.setImageResource(viewModel.imageCodes[8])
+
+            optionOneImage.isEnabled = viewModel.imageCodesEnabled[0]
+            optionTwoImage.isEnabled = viewModel.imageCodesEnabled[1]
+            optionThreeImage.isEnabled = viewModel.imageCodesEnabled[2]
+            optionFourImage.isEnabled = viewModel.imageCodesEnabled[3]
+            optionFiveImage.isEnabled = viewModel.imageCodesEnabled[4]
+            optionSixImage.isEnabled = viewModel.imageCodesEnabled[5]
+            optionSevenImage.isEnabled = viewModel.imageCodesEnabled[6]
+            optionEightImage.isEnabled = viewModel.imageCodesEnabled[7]
+            optionNineImage.isEnabled = viewModel.imageCodesEnabled[8]
+
+            optionOneImage.setOnClickListener { addSelectedButton(1) }
+            optionTwoImage.setOnClickListener { addSelectedButton(2) }
+            optionThreeImage.setOnClickListener { addSelectedButton(3) }
+            optionFourImage.setOnClickListener { addSelectedButton(4) }
+            optionFiveImage.setOnClickListener { addSelectedButton(5) }
+            optionSixImage.setOnClickListener { addSelectedButton(6) }
+            optionSevenImage.setOnClickListener { addSelectedButton(7) }
+            optionEightImage.setOnClickListener { addSelectedButton(8) }
+            optionNineImage.setOnClickListener { addSelectedButton(9) }
         }
     }
 //    val args = SelectButtonFragmentArgs.fromBundle(requireArguments())
 
     // Función para la invocación del dialog
-    private fun addSelectedButton(idImage: Int, imageView: ImageView){
-        val newDialog = AddCodeDialog(idImage, imageView)
+    private fun addSelectedButton(idImage: Int){
+        val newDialog = AddCodeDialog(idImage)
         newDialog.show(childFragmentManager, "code")
 
     }
