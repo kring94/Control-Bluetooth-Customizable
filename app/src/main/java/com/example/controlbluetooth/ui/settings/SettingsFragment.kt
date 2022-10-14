@@ -7,19 +7,26 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.DataSource
+import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentSettingsBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
 import com.example.controlbluetooth.ui.const.Layout
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
+import kotlinx.coroutines.launch
+
 
 class SettingsFragment : Fragment() {
+    // Instanciamiento del dataStore
+    private lateinit var settingsDataStore: SettingsDataStore
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -31,8 +38,6 @@ class SettingsFragment : Fragment() {
             (activity?.application as ControlApplication).database.codesDao()
         )
     }
-
-    //private val viewModel: ControlViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,18 +104,26 @@ class SettingsFragment : Fragment() {
         binding.plusButtonImage.setOnClickListener {
             selectButton()
         }
-
+        // Initialize SettingsDataStore
+        settingsDataStore = SettingsDataStore(requireContext())
+        settingsDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) { value ->
+            binding.modeSwitch.isChecked = value
+            isChecked()
+        }
     }
     //Función de ejecución del cambio en el switch
     private fun isChecked(){
         val isChecked = binding.modeSwitch.isChecked
+        // Launch a coroutine and write the layout setting in the preference Datastore
+        lifecycleScope.launch {
+            settingsDataStore.saveLayoutToPreferencesStore(isChecked, requireContext())
+        }
         viewModel.isCheckedFun(isChecked)
     }
     //Función de navegación al fragmento de selección de boton personalizable
     private fun selectButton(){
         findNavController().navigate(R.id.action_navigation_settings_to_selectButtonFragment)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

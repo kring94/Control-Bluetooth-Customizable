@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentControlBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
@@ -19,13 +21,13 @@ import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 
 class ControlFragment : Fragment() {
+    // Instanciamiento del dataStore
+    private lateinit var settingsDataStore: SettingsDataStore
 
     private var _binding: FragmentControlBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
-
-    //private val viewModel: ControlViewModel by activityViewModels()
 
     private val viewModel: ControlViewModel by activityViewModels {
         ControlViewModelFactory(
@@ -55,11 +57,14 @@ class ControlFragment : Fragment() {
             }
         }
         recyclerView.adapter = codeButtonAdapter
-        isChecked()
+        // Initialize SettingsDataStore
+        settingsDataStore = SettingsDataStore(requireContext())
+        settingsDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) { value ->
+            isChecked(value)
+        }
     }
 
-    private fun isChecked(){
-        val isChecked = viewModel.isChecked.value!!
+    private fun isChecked(isChecked: Boolean){
         binding.apply{
             downleftArrowImage.isVisible = isChecked
             downrightArrowImage.isVisible = isChecked
