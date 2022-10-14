@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.controlbluetooth.R
+import com.example.controlbluetooth.data.DataSource
 import com.example.controlbluetooth.databinding.FragmentSettingsBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
@@ -56,11 +57,20 @@ class SettingsFragment : Fragment() {
             }
         }
         recyclerView.adapter = codeButtonAdapter
+        binding.apply {
+            clearButton.setOnClickListener { viewModel.deleteAllCodes() }
+            modeSwitch.setOnClickListener { isChecked() }
+            //Asignación de códigos a botones estáticos
+            leftCodeText.text = DataSource.staticCodes[0]
+            upCodeText.text = DataSource.staticCodes[1]
+            rightCodeText.text = DataSource.staticCodes[2]
+            downCodeText.text = DataSource.staticCodes[3]
+            centerCodeText.text = DataSource.staticCodes[8]
 
-        binding.clearButton.setOnClickListener { viewModel.deleteAllCodes() }
-
-        binding.modeSwitch.setOnClickListener {
-            isChecked()
+            upleftCodeText.text = DataSource.staticCodes[4]
+            uprightCodeText.text = DataSource.staticCodes[5]
+            downleftCodeText.text = DataSource.staticCodes[6]
+            downrightCodeText.text = DataSource.staticCodes[7]
         }
 
 

@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="controlViewModel"
-            type="com.example.controlbluetooth.ui.viewmodel.ControlViewModel" />
+            name="dataSource"
+            type="com.example.controlbluetooth.data.DataSource" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
