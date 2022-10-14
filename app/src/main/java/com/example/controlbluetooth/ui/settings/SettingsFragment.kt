@@ -43,28 +43,26 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         recyclerView = binding.additionalHorizontalConfRv
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        recyclerView.adapter = CodeButtonAdapter(requireContext(), Layout.SETTINGS)
+        val codeButtonAdapter = CodeButtonAdapter({
+//            val text = "Prueba"
+//            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        }, Layout.SETTINGS)
+        viewModel.allCodes.observe(this.viewLifecycleOwner) { codes ->
+            codes.let {
+                codeButtonAdapter.submitList(it)
+            }
+        }
+        recyclerView.adapter = codeButtonAdapter
+
+        binding.clearButton.setOnClickListener { viewModel.deleteAllCodes() }
 
         binding.modeSwitch.setOnClickListener {
             isChecked()
         }
 
-        // Vinculación de vistas directas  [Se requiere mejorar e implementarse en el viewModel]
-        binding.apply {
-            modeSwitch.text = getString(R.string.simple_mode_switch)
-            leftCodeText.text = viewModel.staticCodes[0].codes
-            upCodeText.text = viewModel.staticCodes[1].codes
-            rightCodeText.text = viewModel.staticCodes[2].codes
-            downCodeText.text = viewModel.staticCodes[3].codes
-            centerCodeText.text = viewModel.staticCodes[8].codes
-
-            upleftCodeText.text = viewModel.staticCodes[4].codes
-            uprightCodeText.text = viewModel.staticCodes[5].codes
-            downleftCodeText.text = viewModel.staticCodes[6].codes
-            downrightCodeText.text = viewModel.staticCodes[7].codes
-        }
 
         // Observador del Switch para cambio de modo
         viewModel.isChecked.observe(viewLifecycleOwner) { state ->

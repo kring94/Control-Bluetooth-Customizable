@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.controlbluetooth.R
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.components.AddCodeDialog
@@ -55,22 +56,22 @@ class SelectButtonFragment : Fragment() {
             optionEightImage.isEnabled = viewModel.imageCodesEnabled[7]
             optionNineImage.isEnabled = viewModel.imageCodesEnabled[8]
 
-            optionOneImage.setOnClickListener { addSelectedButton(1) }
-            optionTwoImage.setOnClickListener { addSelectedButton(2) }
-            optionThreeImage.setOnClickListener { addSelectedButton(3) }
-            optionFourImage.setOnClickListener { addSelectedButton(4) }
-            optionFiveImage.setOnClickListener { addSelectedButton(5) }
-            optionSixImage.setOnClickListener { addSelectedButton(6) }
-            optionSevenImage.setOnClickListener { addSelectedButton(7) }
-            optionEightImage.setOnClickListener { addSelectedButton(8) }
-            optionNineImage.setOnClickListener { addSelectedButton(9) }
+            optionOneImage.setOnClickListener { addSelectedButton(1, R.drawable.uno) }
+            optionTwoImage.setOnClickListener { addSelectedButton(2, R.drawable.dos) }
+            optionThreeImage.setOnClickListener { addSelectedButton(3, R.drawable.tres) }
+            optionFourImage.setOnClickListener { addSelectedButton(4, R.drawable.cuatro) }
+            optionFiveImage.setOnClickListener { addSelectedButton(5, R.drawable.cinco) }
+            optionSixImage.setOnClickListener { addSelectedButton(6, R.drawable.seis) }
+            optionSevenImage.setOnClickListener { addSelectedButton(7, R.drawable.siete) }
+            optionEightImage.setOnClickListener { addSelectedButton(8, R.drawable.ocho) }
+            optionNineImage.setOnClickListener { addSelectedButton(9, R.drawable.nueve) }
         }
     }
 //    val args = SelectButtonFragmentArgs.fromBundle(requireArguments())
 
     // Función para la invocación del dialog
-    private fun addSelectedButton(idImage: Int){
-        val newDialog = AddCodeDialog(idImage)
+    private fun addSelectedButton(idImage: Int, dImage: Int){
+        val newDialog = AddCodeDialog(idImage,dImage)
         newDialog.show(childFragmentManager, "code")
 
     }

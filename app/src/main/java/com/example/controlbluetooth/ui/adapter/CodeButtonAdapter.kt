@@ -1,45 +1,89 @@
 package com.example.controlbluetooth.ui.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.controlbluetooth.R
-import com.example.controlbluetooth.data.DataSource
+import com.example.controlbluetooth.databinding.AddittionalListItemBinding
+import com.example.controlbluetooth.model.Codes
 
-class CodeButtonAdapter(private val  context: Context?,
-    private val layout: Int): RecyclerView.Adapter<CodeButtonAdapter.CodeButtonViewHolder>() {
 
-    private val dataCodeButton = DataSource.codeButton
 
-    class CodeButtonViewHolder(view: View?):RecyclerView.ViewHolder(view!!) {
-        val buttonImage: ImageView = view!!.findViewById(R.id.button_image)
-        val codeButtonText: TextView = view!!.findViewById(R.id.code_button_text)
-    }
+class CodeButtonAdapter(private val onItemClicked: (Codes) -> Unit,val layout: Int):
+    ListAdapter<Codes, CodeButtonAdapter.CodeViewHolder>(DiffCallBack){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CodeButtonViewHolder {
-       val adapterLayoutHorizontal = LayoutInflater.from(parent.context)
-           .inflate(R.layout.addittional_list_item, parent, false)
+//    private val dataCodeButton = DataSource.codeButton
+//
+//    class CodeButtonViewHolder(view: View?):RecyclerView.ViewHolder(view!!) {
+//        val buttonImage: ImageView = view!!.findViewById(R.id.button_image)
+//        val codeButtonText: TextView = view!!.findViewById(R.id.code_button_text)
+//    }
 
-        return CodeButtonViewHolder(adapterLayoutHorizontal)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CodeViewHolder {
+//       val adapterLayoutHorizontal = LayoutInflater.from(parent.context)
+//           .inflate(R.layout.addittional_list_item, parent, false)
+        //return CodeButtonViewHolder(adapterLayoutHorizontal)
 
-    override fun onBindViewHolder(holder: CodeButtonViewHolder, position: Int) {
-        val codeButton = dataCodeButton[position]
+        val codeViewHolder = CodeViewHolder(
+            AddittionalListItemBinding.inflate(
+                LayoutInflater.from(parent.context),parent,false
+            )
+        )
 
-        when(layout){
-            1 -> holder.buttonImage.setImageResource(codeButton.imageButton)
-            2 -> {
-                holder.buttonImage.setImageResource(codeButton.imageButton)
-                holder.codeButtonText.text = codeButton.codeButtonText
-            }
+        codeViewHolder.itemView.setOnClickListener {
+            val position = codeViewHolder.adapterPosition
+            onItemClicked(getItem(position))
         }
-
+        return codeViewHolder
     }
 
-    override fun getItemCount(): Int = DataSource.codeButton.size
+//    override fun onBindViewHolder(holder: CodeButtonViewHolder, position: Int) {
+//        //val codeButton = dataCodeButton[position]
+//
+
+//
+//    }
+
+    override fun onBindViewHolder(holder: CodeViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+//    override fun getItemCount(): Int = DataSource.codeButton.size
+
+    class CodeViewHolder(private var binding: AddittionalListItemBinding): RecyclerView.ViewHolder(binding.root){
+
+        fun bind(code: Codes){
+//            when(layout){
+//                1 -> binding.buttonImage.setImageResource(code.drawableImage)
+//                2 -> {
+//                    binding.apply {
+//                        buttonImage.setImageResource(code.drawableImage)
+//                        codeButtonText.text = code.codeButton
+//                    }
+//                }
+//            }
+            binding.apply {
+                buttonImage.setImageResource(code.drawableImage)
+                codeButtonText.text = code.codeButton
+            }
+
+        }
+    }
+
+
+    companion object {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<Codes>() {
+            override fun areItemsTheSame(oldItem: Codes, newItem: Codes): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Codes, newItem: Codes): Boolean {
+                return oldItem.codeButton == newItem.codeButton
+            }
+
+        }
+    }
+
 
 }

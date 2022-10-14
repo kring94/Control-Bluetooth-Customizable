@@ -11,5 +11,9 @@ data class Codes(
     @ColumnInfo(name = "code_button")
     val codeButton: String,
     @ColumnInfo(name = "code_image")
-    val codeImage: Int
+    val codeImage: Int,
+    @ColumnInfo(name = "drawable_image")
+    val drawableImage: Int,
+    @ColumnInfo(name = "button_enabled")
+    val buttonEnabled: Boolean
     )

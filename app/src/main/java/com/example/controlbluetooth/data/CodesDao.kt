@@ -17,6 +17,9 @@ interface CodesDao {
     @Delete
     suspend fun delete(codes: Codes)
 
+    @Query("DELETE FROM codes_database")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM codes_database")
     fun getCodes(): Flow<List<Codes>>
 

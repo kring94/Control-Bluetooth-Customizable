@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.controlbluetooth.model.Codes
 
-@Database(entities = [Codes::class], version = 1, exportSchema = false)
+@Database(entities = [Codes::class], version = 3, exportSchema = false)
 abstract class CodesDatabase: RoomDatabase() {
     abstract fun codesDao(): CodesDao
 

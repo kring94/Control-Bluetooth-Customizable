@@ -3,37 +3,18 @@ package com.example.controlbluetooth.ui.viewmodel
 import androidx.lifecycle.*
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.CodesDao
-import com.example.controlbluetooth.data.DataSource
-import com.example.controlbluetooth.model.CodeButton
 import com.example.controlbluetooth.model.Codes
-import com.example.controlbluetooth.model.StaticCodes
 import kotlinx.coroutines.launch
 
 
 //private val codesDao: CodesDao
 class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
 
-    val staticCodes: List<StaticCodes> = DataSource.staticCodes
-    private val addCodeButton = DataSource.codeButton
-
     // Variables liveData para manejar el cambio del switch
     private var _isChecked = MutableLiveData(false)
     val isChecked: LiveData<Boolean>
         get() = _isChecked
 
-    fun addButton(id: Int, code: String) {
-        when (id) {
-            1 -> addCodeButton.add(CodeButton(code, R.drawable.uno))
-            2 -> addCodeButton.add(CodeButton(code, R.drawable.dos))
-            3 -> addCodeButton.add(CodeButton(code, R.drawable.tres))
-            4 -> addCodeButton.add(CodeButton(code, R.drawable.cuatro))
-            5 -> addCodeButton.add(CodeButton(code, R.drawable.cinco))
-            6 -> addCodeButton.add(CodeButton(code, R.drawable.seis))
-            7 -> addCodeButton.add(CodeButton(code, R.drawable.siete))
-            8 -> addCodeButton.add(CodeButton(code, R.drawable.ocho))
-            9 -> addCodeButton.add(CodeButton(code, R.drawable.nueve))
-        }
-    }
 
     // Función para cambio de imagen a una de configuración
     private var _imageCodes = mutableListOf(
@@ -135,22 +116,31 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     }
 
     // Función base para la eliminación de un código
-    private fun deleteCode(code: Codes) {
+    fun deleteCode(code: Codes) {
         viewModelScope.launch {
             codesDao.delete(code)
         }
     }
 
+    // Función base para la eliminación de todos los códigos
+    fun deleteAllCodes() {
+        viewModelScope.launch {
+            codesDao.deleteAll()
+        }
+    }
+
     // Funciones para agregra un nuevo código
-    private fun getNewCodeEntry(codeButton: String, codeImage: Int): Codes {
+    private fun getNewCodeEntry(codeButton: String, codeImage: Int, dImage: Int, buttonEnabled: Boolean): Codes {
         return Codes(
             codeButton = codeButton,
-            codeImage = codeImage
+            codeImage = codeImage,
+            drawableImage = dImage,
+            buttonEnabled = buttonEnabled
         )
     }
 
-    fun addNewCode(codeButton: String, codeImage: Int) {
-        val newCode = getNewCodeEntry(codeButton, codeImage)
+    fun addNewCode(codeButton: String, codeImage: Int, dImage: Int, buttonEnabled: Boolean) {
+        val newCode = getNewCodeEntry(codeButton, codeImage, dImage, buttonEnabled)
         insertCodeButton(newCode)
     }
 
