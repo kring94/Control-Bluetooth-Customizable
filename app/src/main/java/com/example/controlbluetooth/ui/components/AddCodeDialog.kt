@@ -34,11 +34,6 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int) : DialogFr
 
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
-            // Get the layout inflater
-//            val inflater = requireActivity().layoutInflater;
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-//            builder.setView(inflater.inflate(R.layout.fragment_add_code_dialog, null))
 
                 // Add action buttons
                 .setPositiveButton(R.string.add,
@@ -69,10 +64,8 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int) : DialogFr
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {
             viewModel.addNewCode(code, idCode, dImage, false)
-            //viewModel.addButton(idCode, code)
             viewModel.changeImageConf(idCode)
             findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)
-
         }
     }
 

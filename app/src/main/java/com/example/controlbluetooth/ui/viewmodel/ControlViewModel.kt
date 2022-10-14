@@ -100,6 +100,11 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     fun getCode(id: Int): LiveData<Codes> {
         return codesDao.getCode(id).asLiveData()
     }
+    // Función para la recuperación del estado de un bóton ya seleccionado
+    fun getStateButton(code_image: Int): Boolean {
+        return codesDao.getEnableState(code_image)
+    }
+
 
     // Función base para insertar códigos y botones
     private fun insertCodeButton(code: Codes) {
