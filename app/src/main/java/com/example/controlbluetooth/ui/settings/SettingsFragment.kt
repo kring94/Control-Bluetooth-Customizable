@@ -124,6 +124,7 @@ class SettingsFragment : Fragment() {
     private fun selectButton(){
         findNavController().navigate(R.id.action_navigation_settings_to_selectButtonFragment)
     }
+    //F
 
     override fun onDestroyView() {
         super.onDestroyView()

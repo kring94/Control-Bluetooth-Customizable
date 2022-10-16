@@ -16,7 +16,7 @@ import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 
-class AddCodeDialog(private val idCode: Int, private val dImage: Int) : DialogFragment() {
+class AddCodeDialog(private val idCode: Int, private val dImage: Int, private val dImageConf: Int) : DialogFragment() {
 
     private var _binding: FragmentAddCodeDialogBinding? = null
     private val binding get() = _binding!!
@@ -63,7 +63,7 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int) : DialogFr
             val text = "No se permite dejar vacia la entrada del código de asignación del botón"
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {
-            viewModel.addNewCode(code, idCode, dImage, false)
+            viewModel.addNewCode(code, idCode, dImage, dImageConf, false)
             viewModel.changeImageConf(idCode)
             findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)
         }

@@ -32,7 +32,7 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     val imageCodes: List<Int> get() = _imageCodes
 
     // Función para deshabilitar imagen
-    private var _imageCodesEnabled = mutableListOf(
+    var _imageCodesEnabled = mutableListOf(
         true,
         true,
         true,
@@ -101,8 +101,8 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
         return codesDao.getCode(id).asLiveData()
     }
     // Función para la recuperación del estado de un bóton ya seleccionado
-    fun getStateButton(code_image: Int): Boolean {
-        return codesDao.getEnableState(code_image)
+    fun getStateButton(code_image: Int): LiveData<Boolean> {
+        return codesDao.getEnableState(code_image).asLiveData()
     }
 
 
@@ -135,17 +135,18 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     }
 
     // Funciones para agregra un nuevo código
-    private fun getNewCodeEntry(codeButton: String, codeImage: Int, dImage: Int, buttonEnabled: Boolean): Codes {
+    private fun getNewCodeEntry(codeButton: String, codeImage: Int, dImage: Int, dImageConf: Int, buttonEnabled: Boolean): Codes {
         return Codes(
             codeButton = codeButton,
             codeImage = codeImage,
             drawableImage = dImage,
+            drawableImageConf = dImageConf,
             buttonEnabled = buttonEnabled
         )
     }
 
-    fun addNewCode(codeButton: String, codeImage: Int, dImage: Int, buttonEnabled: Boolean) {
-        val newCode = getNewCodeEntry(codeButton, codeImage, dImage, buttonEnabled)
+    fun addNewCode(codeButton: String, codeImage: Int, dImage: Int, dImageConf: Int, buttonEnabled: Boolean) {
+        val newCode = getNewCodeEntry(codeButton, codeImage, dImage, dImageConf, buttonEnabled)
         insertCodeButton(newCode)
     }
 
