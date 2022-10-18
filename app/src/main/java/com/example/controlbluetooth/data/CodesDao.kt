@@ -23,10 +23,16 @@ interface CodesDao {
     @Query("SElECT button_enabled FROM codes_database WHERE code_image = :code_image")
     fun getEnableState(code_image: Int): Flow<Boolean>
 
+    @Query("SELECT code_button FROM codes_database")
+    fun getCodeLetters(): Flow<List<String>>
+
+    @Query("SELECT code_image FROM codes_database")
+    fun getCodeImages(): Flow<List<Int>>
+
     @Query("SELECT * FROM codes_database")
     fun getCodes(): Flow<List<Codes>>
 
-    @Query("SELECT * FROM codes_database WHERE id = :code_image")
+    @Query("SELECT * FROM codes_database WHERE code_image = :code_image")
     fun getCode(code_image: Int): Flow<Codes>
 
 }

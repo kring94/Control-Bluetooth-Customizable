@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.CodesDao
 import com.example.controlbluetooth.model.Codes
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 
@@ -96,10 +97,17 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     // Lista observable para la recuperación de todos los códigos y botones
     val allCodes: LiveData<List<Codes>> = codesDao.getCodes().asLiveData()
 
+    // Lista observable para traer la lista de códigos de letra
+    val allCodeLetter: Flow<List<String>> = codesDao.getCodeLetters()
+
+    //
+    val codesImages: LiveData<List<Int>> = codesDao.getCodeImages().asLiveData()
+
     // Función de recuperación de un código y botón especifico
-    fun getCode(id: Int): LiveData<Codes> {
-        return codesDao.getCode(id).asLiveData()
+    fun getCode(idImage: Int): LiveData<Codes> {
+        return codesDao.getCode(idImage).asLiveData()
     }
+
     // Función para la recuperación del estado de un bóton ya seleccionado
     fun getStateButton(code_image: Int): LiveData<Boolean> {
         return codesDao.getEnableState(code_image).asLiveData()
@@ -135,7 +143,13 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     }
 
     // Funciones para agregra un nuevo código
-    private fun getNewCodeEntry(codeButton: String, codeImage: Int, dImage: Int, dImageConf: Int, buttonEnabled: Boolean): Codes {
+    private fun getNewCodeEntry(
+        codeButton: String,
+        codeImage: Int,
+        dImage: Int,
+        dImageConf: Int,
+        buttonEnabled: Boolean
+    ): Codes {
         return Codes(
             codeButton = codeButton,
             codeImage = codeImage,
@@ -145,7 +159,13 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
         )
     }
 
-    fun addNewCode(codeButton: String, codeImage: Int, dImage: Int, dImageConf: Int, buttonEnabled: Boolean) {
+    fun addNewCode(
+        codeButton: String,
+        codeImage: Int,
+        dImage: Int,
+        dImageConf: Int,
+        buttonEnabled: Boolean
+    ) {
         val newCode = getNewCodeEntry(codeButton, codeImage, dImage, dImageConf, buttonEnabled)
         insertCodeButton(newCode)
     }
@@ -164,6 +184,6 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
             updateCode(newCode)
         }
     }
-
-
 }
+
+

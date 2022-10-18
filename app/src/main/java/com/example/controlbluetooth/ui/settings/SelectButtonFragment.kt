@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import com.example.controlbluetooth.R
+import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
 import com.example.controlbluetooth.model.Codes
 import com.example.controlbluetooth.ui.ControlApplication
@@ -17,6 +19,9 @@ import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 const val TAG = "SelectButtonFragment"
 class SelectButtonFragment : Fragment() {
+
+    // Instanciamiento del dataStore
+    private lateinit var settingsDataStore: SettingsDataStore
 
     private var _binding: FragmentSelectButtonBinding? = null
     private val binding get() = _binding!!
@@ -40,26 +45,51 @@ class SelectButtonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        binding.apply {
-            optionOneImage.setImageResource(viewModel.imageCodes[0])
-            optionTwoImage.setImageResource(viewModel.imageCodes[1])
-            optionThreeImage.setImageResource(viewModel.imageCodes[2])
-            optionFourImage.setImageResource(viewModel.imageCodes[3])
-            optionFiveImage.setImageResource(viewModel.imageCodes[4])
-            optionSixImage.setImageResource(viewModel.imageCodes[5])
-            optionSevenImage.setImageResource(viewModel.imageCodes[6])
-            optionEightImage.setImageResource(viewModel.imageCodes[7])
-            optionNineImage.setImageResource(viewModel.imageCodes[8])
+        // Initialize SettingsDataStore
+        settingsDataStore = SettingsDataStore(requireContext())
+        settingsDataStore.preferenceOneImage.asLiveData().observe(viewLifecycleOwner) { value ->
+            binding.optionOneImage.isEnabled = value
+            Log.d(TAG, value.toString())
+        }
+        settingsDataStore.preferenceTwoImage.asLiveData().observe(viewLifecycleOwner) { value ->
+            binding.optionOneImage.isEnabled = value
+        }
+        settingsDataStore.preferenceThreeImage.asLiveData().observe(viewLifecycleOwner) { value ->
+            binding.optionOneImage.isEnabled = value
+        }
 
-            optionOneImage.isEnabled = viewModel.imageCodesEnabled[0]
-            optionTwoImage.isEnabled = viewModel.imageCodesEnabled[1]
-            optionThreeImage.isEnabled = viewModel.imageCodesEnabled[2]
-            optionFourImage.isEnabled = viewModel.imageCodesEnabled[3]
-            optionFiveImage.isEnabled = viewModel.imageCodesEnabled[4]
-            optionSixImage.isEnabled = viewModel.imageCodesEnabled[5]
-            optionSevenImage.isEnabled = viewModel.imageCodesEnabled[6]
-            optionEightImage.isEnabled = viewModel.imageCodesEnabled[7]
-            optionNineImage.isEnabled = viewModel.imageCodesEnabled[8]
+//        viewModel.getCode(3).observe(this.viewLifecycleOwner) { selectedCode ->
+//            codes = selectedCode
+//            binding.optionOneImage.isEnabled = codes.buttonEnabled
+//            binding.optionThreeImage.setImageResource(codes.drawableImageConf)
+//            Log.d(TAG, codes.buttonEnabled.toString())
+//        }
+//        lifecycleScope.launch {
+//            Log.d(TAG, viewModel.getStateButton(3).toString())
+//            binding.optionThreeImage.isEnabled = viewModel.getStateButton(1)
+//        }
+
+
+        binding.apply {
+//            optionOneImage.setImageResource(viewModel.imageCodes[0])
+//            optionTwoImage.setImageResource(viewModel.imageCodes[1])
+//            optionThreeImage.setImageResource(viewModel.imageCodes[2])
+//            optionFourImage.setImageResource(viewModel.imageCodes[3])
+//            optionFiveImage.setImageResource(viewModel.imageCodes[4])
+//            optionSixImage.setImageResource(viewModel.imageCodes[5])
+//            optionSevenImage.setImageResource(viewModel.imageCodes[6])
+//            optionEightImage.setImageResource(viewModel.imageCodes[7])
+//            optionNineImage.setImageResource(viewModel.imageCodes[8])
+//
+//            optionOneImage.isEnabled = viewModel.imageCodesEnabled[0]
+//            optionTwoImage.isEnabled = viewModel.imageCodesEnabled[1]
+//            optionThreeImage.isEnabled = viewModel.imageCodesEnabled[2]
+//            optionFourImage.isEnabled = viewModel.imageCodesEnabled[3]
+//            optionFiveImage.isEnabled = viewModel.imageCodesEnabled[4]
+//            optionSixImage.isEnabled = viewModel.imageCodesEnabled[5]
+//            optionSevenImage.isEnabled = viewModel.imageCodesEnabled[6]
+//            optionEightImage.isEnabled = viewModel.imageCodesEnabled[7]
+//            optionNineImage.isEnabled = viewModel.imageCodesEnabled[8]
 
             optionOneImage.setOnClickListener { addSelectedButton(1, R.drawable.uno, R.drawable.uno_conf) }
             optionTwoImage.setOnClickListener { addSelectedButton(2, R.drawable.dos, R.drawable.dos_conf) }
@@ -78,37 +108,16 @@ class SelectButtonFragment : Fragment() {
     private fun addSelectedButton(idImage: Int, dImage: Int, dImageConf: Int){
         val newDialog = AddCodeDialog(idImage,dImage, dImageConf)
         newDialog.show(childFragmentManager, "code")
+//        viewModel.codesImages.observe(this.viewLifecycleOwner) {
+//            it.contains(idImage)
+//            Log.d(TAG, it.contains(idImage).toString())
+//        }
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onPause")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.d(TAG, "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
+        //Log.d(TAG, "onDestroyView")
     }
 }
