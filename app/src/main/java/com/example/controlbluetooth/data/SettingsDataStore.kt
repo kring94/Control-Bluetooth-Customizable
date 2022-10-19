@@ -55,31 +55,6 @@ class SettingsDataStore(context: Context) {
             preferences[IS_FULL_MODE_LAYOUT] ?: true
         }
     // Function and variables for save imageButton selected
-//    suspend fun saveSelectedButtons(context: Context,
-//                                    oneButton: Boolean,
-//                                    twoButton: Boolean,
-//                                    threeButton: Boolean,
-//                                    fourButton: Boolean,
-//                                    fiveButton: Boolean,
-//                                    sixButton: Boolean,
-//                                    sevenButton: Boolean,
-//                                    eightButton: Boolean,
-//                                    nineButton: Boolean
-//    ){
-//      context.dataStore.edit { selectedButton ->
-//          selectedButton[IMAGE_ONE_SELECT] = oneButton
-//          selectedButton[IMAGE_TWO_SELECT] = twoButton
-//          selectedButton[IMAGE_THREE_SELECT] = threeButton
-//          selectedButton[IMAGE_FOUR_SELECT] = fourButton
-//          selectedButton[IMAGE_FIVE_SELECT] = fiveButton
-//          selectedButton[IMAGE_SIX_SELECT] = sixButton
-//          selectedButton[IMAGE_SEVEN_SELECT] = sevenButton
-//          selectedButton[IMAGE_EIGHT_SELECT] = eightButton
-//          selectedButton[IMAGE_NINE_SELECT] = nineButton
-//
-//      }
-//    }
-
     suspend fun saveSelectedButtons(context: Context,
                                     stateButton: Boolean,
                                     idImage: Int

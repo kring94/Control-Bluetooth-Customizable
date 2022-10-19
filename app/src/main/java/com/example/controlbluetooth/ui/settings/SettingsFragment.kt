@@ -63,7 +63,10 @@ class SettingsFragment : Fragment() {
         }
         recyclerView.adapter = codeButtonAdapter
         binding.apply {
-            clearButton.setOnClickListener { viewModel.deleteAllCodes() }
+            clearButton.setOnClickListener {
+                viewModel.deleteAllCodes()
+                clearButtonDisabled()
+            }
             modeSwitch.setOnClickListener { isChecked() }
             //Asignación de códigos a botones estáticos
             leftCodeText.text = DataSource.staticCodes[0]
@@ -124,7 +127,21 @@ class SettingsFragment : Fragment() {
     private fun selectButton(){
         findNavController().navigate(R.id.action_navigation_settings_to_selectButtonFragment)
     }
-    //F
+
+    // Function to enable disabled buttons
+    fun clearButtonDisabled() {
+        lifecycleScope.launch {
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 1)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 2)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 3)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 4)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 5)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 6)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 7)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 8)
+            settingsDataStore.saveSelectedButtons(requireContext(), true, 9)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

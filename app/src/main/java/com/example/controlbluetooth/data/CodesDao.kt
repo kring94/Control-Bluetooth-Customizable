@@ -20,8 +20,6 @@ interface CodesDao {
     @Query("DELETE FROM codes_database")
     suspend fun deleteAll()
 
-    @Query("SElECT button_enabled FROM codes_database WHERE code_image = :code_image")
-    fun getEnableState(code_image: Int): Flow<Boolean>
 
     @Query("SELECT code_button FROM codes_database")
     fun getCodeLetters(): Flow<List<String>>

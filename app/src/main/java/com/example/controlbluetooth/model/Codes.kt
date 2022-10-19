@@ -16,6 +16,4 @@ data class Codes(
     val drawableImage: Int,
     @ColumnInfo(name = "drawable_image_conf")
     val drawableImageConf: Int,
-    @ColumnInfo(name = "button_enabled")
-    val buttonEnabled: Boolean
     )

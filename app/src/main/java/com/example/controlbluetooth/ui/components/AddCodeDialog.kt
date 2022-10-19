@@ -17,6 +17,7 @@ import com.example.controlbluetooth.databinding.FragmentAddCodeDialogBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -41,7 +42,6 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int, private va
 
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
-
                 // Add action buttons
                 .setPositiveButton(R.string.add,
                     DialogInterface.OnClickListener { _, _ ->
@@ -71,15 +71,14 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int, private va
             val text = "No se permite ingresar un código de letra ya existente"
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {
-            viewModel.addNewCode(code, idCode, dImage, dImageConf, false)
+            viewModel.addNewCode(code, idCode, dImage, dImageConf)
             setImageConf(idCode)
-            //viewModel.changeImageConf(idCode)
             findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)
         }
     }
 
     private fun setImageConf(idCode: Int){
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             settingsDataStore.saveSelectedButtons(requireContext(), false, idCode)
         }
     }

@@ -1,7 +1,6 @@
 package com.example.controlbluetooth.ui.viewmodel
 
 import androidx.lifecycle.*
-import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.CodesDao
 import com.example.controlbluetooth.model.Codes
 import kotlinx.coroutines.flow.Flow
@@ -16,81 +15,11 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     val isChecked: LiveData<Boolean>
         get() = _isChecked
 
-
-    // Función para cambio de imagen a una de configuración
-    private var _imageCodes = mutableListOf(
-        R.drawable.uno,
-        R.drawable.dos,
-        R.drawable.tres,
-        R.drawable.cuatro,
-        R.drawable.cinco,
-        R.drawable.seis,
-        R.drawable.siete,
-        R.drawable.ocho,
-        R.drawable.nueve
-    )
-
-    val imageCodes: List<Int> get() = _imageCodes
-
-    // Función para deshabilitar imagen
-    var _imageCodesEnabled = mutableListOf(
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true
-    )
-    val imageCodesEnabled: List<Boolean> get() = _imageCodesEnabled
-
-    fun changeImageConf(idImage: Int) {
-        when (idImage) {
-            1 -> {
-                _imageCodes[0] = R.drawable.uno_conf
-                _imageCodesEnabled[0] = false
-            }
-            2 -> {
-                _imageCodes[1] = R.drawable.dos_conf
-                _imageCodesEnabled[1] = false
-            }
-            3 -> {
-                _imageCodes[2] = R.drawable.tres_conf
-                _imageCodesEnabled[2] = false
-            }
-            4 -> {
-                _imageCodes[3] = R.drawable.cuatro_conf
-                _imageCodesEnabled[3] = false
-            }
-            5 -> {
-                _imageCodes[4] = R.drawable.cinco_conf
-                _imageCodesEnabled[4] = false
-            }
-            6 -> {
-                _imageCodes[5] = R.drawable.seis_conf
-                _imageCodesEnabled[5] = false
-            }
-            7 -> {
-                _imageCodes[6] = R.drawable.siete_conf
-                _imageCodesEnabled[6] = false
-            }
-            8 -> {
-                _imageCodes[7] = R.drawable.ocho_conf
-                _imageCodesEnabled[7] = false
-            }
-            9 -> {
-                _imageCodes[8] = R.drawable.nueve_conf
-                _imageCodesEnabled[8] = false
-            }
-        }
-    }
-
     // Función de asignación de cambio del switch
     fun isCheckedFun(checked: Boolean) {
         _isChecked.value = checked
     }
+
 
     // TODO Inicio de implementación ROOM ########
 
@@ -100,17 +29,9 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     // Lista observable para traer la lista de códigos de letra
     val allCodeLetter: Flow<List<String>> = codesDao.getCodeLetters()
 
-    //
-    val codesImages: LiveData<List<Int>> = codesDao.getCodeImages().asLiveData()
-
     // Función de recuperación de un código y botón especifico
     fun getCode(idImage: Int): LiveData<Codes> {
         return codesDao.getCode(idImage).asLiveData()
-    }
-
-    // Función para la recuperación del estado de un bóton ya seleccionado
-    fun getStateButton(code_image: Int): LiveData<Boolean> {
-        return codesDao.getEnableState(code_image).asLiveData()
     }
 
 
@@ -147,15 +68,13 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
         codeButton: String,
         codeImage: Int,
         dImage: Int,
-        dImageConf: Int,
-        buttonEnabled: Boolean
+        dImageConf: Int
     ): Codes {
         return Codes(
             codeButton = codeButton,
             codeImage = codeImage,
             drawableImage = dImage,
-            drawableImageConf = dImageConf,
-            buttonEnabled = buttonEnabled
+            drawableImageConf = dImageConf
         )
     }
 
@@ -163,10 +82,9 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
         codeButton: String,
         codeImage: Int,
         dImage: Int,
-        dImageConf: Int,
-        buttonEnabled: Boolean
+        dImageConf: Int
     ) {
-        val newCode = getNewCodeEntry(codeButton, codeImage, dImage, dImageConf, buttonEnabled)
+        val newCode = getNewCodeEntry(codeButton, codeImage, dImage, dImageConf)
         insertCodeButton(newCode)
     }
 
