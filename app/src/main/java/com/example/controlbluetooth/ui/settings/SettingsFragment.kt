@@ -23,6 +23,7 @@ import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 import kotlinx.coroutines.launch
 
+const val TAG2 = "SettingsFragment"
 
 class SettingsFragment : Fragment() {
     // Instanciamiento del dataStore
@@ -61,6 +62,7 @@ class SettingsFragment : Fragment() {
                 codeButtonAdapter.submitList(it)
             }
         }
+
         recyclerView.adapter = codeButtonAdapter
         binding.apply {
             clearButton.setOnClickListener {

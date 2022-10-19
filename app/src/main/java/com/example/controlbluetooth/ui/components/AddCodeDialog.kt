@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class AddCodeDialog(private val idCode: Int, private val dImage: Int, private val dImageConf: Int) : DialogFragment() {
+class AddCodeDialog(private val idCode: Int, private val dImage: Int, private val dImageConf: Int, private val listLetter: List<String>) : DialogFragment() {
 
     private var _binding: FragmentAddCodeDialogBinding? = null
     private val binding get() = _binding!!
@@ -41,8 +41,7 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int, private va
             settingsDataStore = SettingsDataStore(requireContext())
 
             val builder = AlertDialog.Builder(it)
-            builder.setView(binding.root)
-                // Add action buttons
+            builder.setView(binding.root) // Add action buttons
                 .setPositiveButton(R.string.add,
                     DialogInterface.OnClickListener { _, _ ->
                         val code = binding.letterCode.text.toString()
@@ -60,6 +59,7 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int, private va
     private fun isInputCorrect(code: String){
         val lengthCode = code.length
         val codeLetter:Boolean = DataSource.staticCodes.contains(code)
+        val codeLetterDB: Boolean = listLetter.contains(code)
 
         if(lengthCode >= 2){
             val text = "Se permite ingresar máximo un caracter"
@@ -67,7 +67,7 @@ class AddCodeDialog(private val idCode: Int, private val dImage: Int, private va
         } else if(lengthCode == 0){
             val text = "No se permite dejar vacia la entrada del código de asignación del botón"
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-        } else if(codeLetter){
+        } else if(codeLetter || codeLetterDB){
             val text = "No se permite ingresar un código de letra ya existente"
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         } else {

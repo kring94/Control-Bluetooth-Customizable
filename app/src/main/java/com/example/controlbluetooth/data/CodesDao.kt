@@ -24,9 +24,6 @@ interface CodesDao {
     @Query("SELECT code_button FROM codes_database")
     fun getCodeLetters(): Flow<List<String>>
 
-    @Query("SELECT code_image FROM codes_database")
-    fun getCodeImages(): Flow<List<Int>>
-
     @Query("SELECT * FROM codes_database")
     fun getCodes(): Flow<List<Codes>>
 

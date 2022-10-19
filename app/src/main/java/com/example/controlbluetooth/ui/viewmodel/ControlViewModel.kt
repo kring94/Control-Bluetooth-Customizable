@@ -3,7 +3,6 @@ package com.example.controlbluetooth.ui.viewmodel
 import androidx.lifecycle.*
 import com.example.controlbluetooth.data.CodesDao
 import com.example.controlbluetooth.model.Codes
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 
@@ -26,8 +25,9 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
     // Lista observable para la recuperación de todos los códigos y botones
     val allCodes: LiveData<List<Codes>> = codesDao.getCodes().asLiveData()
 
+
     // Lista observable para traer la lista de códigos de letra
-    val allCodeLetter: Flow<List<String>> = codesDao.getCodeLetters()
+    val allCodeLetter: LiveData<List<String>> = codesDao.getCodeLetters().asLiveData()
 
     // Función de recuperación de un código y botón especifico
     fun getCode(idImage: Int): LiveData<Codes> {

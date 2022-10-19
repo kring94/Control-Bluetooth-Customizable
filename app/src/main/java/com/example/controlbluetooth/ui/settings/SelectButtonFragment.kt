@@ -1,16 +1,19 @@
 package com.example.controlbluetooth.ui.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
+import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.components.AddCodeDialog
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
 
 const val TAG = "SelectButtonFragment"
 class SelectButtonFragment : Fragment() {
@@ -20,6 +23,15 @@ class SelectButtonFragment : Fragment() {
 
     private var _binding: FragmentSelectButtonBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: ControlViewModel by activityViewModels {
+        ControlViewModelFactory(
+            (activity?.application as ControlApplication).database.codesDao()
+        )
+    }
+
+    var listLetters: List<String> = emptyList()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +43,11 @@ class SelectButtonFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Recovery list of code letter from DB
+        viewModel.allCodeLetter.observe(this.viewLifecycleOwner) {  letters ->
+            listLetters = letters ?: emptyList()
+        }
+
         observeButtonWithDataStore()
         onClickButton()
     }
@@ -38,7 +55,7 @@ class SelectButtonFragment : Fragment() {
 
     // Función para la invocación del dialog
     private fun addSelectedButton(idImage: Int, dImage: Int, dImageConf: Int){
-        val newDialog = AddCodeDialog(idImage,dImage, dImageConf)
+        val newDialog = AddCodeDialog(idImage,dImage, dImageConf, listLetters)
         newDialog.show(childFragmentManager, "code")
 
     }
@@ -71,7 +88,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "One $value")
         }
         settingsDataStore.preferenceTwoImage.asLiveData().observe(viewLifecycleOwner) { value ->
             binding.apply {
@@ -82,7 +98,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Two $value")
         }
         settingsDataStore.preferenceThreeImage.asLiveData().observe(viewLifecycleOwner) { value ->
             binding.apply {
@@ -93,7 +108,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Three $value")
         }
         settingsDataStore.preferenceFourImage.asLiveData().observe(viewLifecycleOwner) { value ->
             binding.apply {
@@ -104,7 +118,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Four $value")
         }
         settingsDataStore.preferenceFiveImage.asLiveData().observe(viewLifecycleOwner) { value ->
             binding.apply {
@@ -115,7 +128,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Five $value")
         }
 
         settingsDataStore.preferenceSixImage.asLiveData().observe(viewLifecycleOwner) { value ->
@@ -127,7 +139,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Six $value")
         }
 
         settingsDataStore.preferenceSevenImage.asLiveData().observe(viewLifecycleOwner) { value ->
@@ -139,7 +150,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Seven $value")
         }
 
         settingsDataStore.preferenceEightImage.asLiveData().observe(viewLifecycleOwner) { value ->
@@ -151,7 +161,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Eight $value")
         }
 
         settingsDataStore.preferenceNineImage.asLiveData().observe(viewLifecycleOwner) { value ->
@@ -163,7 +172,6 @@ class SelectButtonFragment : Fragment() {
                     }
                 }
             }
-            Log.d(TAG, "Nine $value")
         }
     }
 
