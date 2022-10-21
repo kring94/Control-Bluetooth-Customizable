@@ -16,11 +16,13 @@ import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.DataSource
 import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentSettingsBinding
+import com.example.controlbluetooth.model.Codes
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
 import com.example.controlbluetooth.ui.const.Layout
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 const val TAG2 = "SettingsFragment"
@@ -40,6 +42,8 @@ class SettingsFragment : Fragment() {
         )
     }
 
+    lateinit var code: Codes
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,9 +57,13 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = binding.additionalHorizontalConfRv
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        val codeButtonAdapter = CodeButtonAdapter({
+        val codeButtonAdapter = CodeButtonAdapter({ codeSelected ->
 //            val text = "Prueba"
 //            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+            code = codeSelected
+            showConfirmationDialog()
+
+
         }, Layout.SETTINGS)
         viewModel.allCodes.observe(this.viewLifecycleOwner) { codes ->
             codes.let {
@@ -66,8 +74,7 @@ class SettingsFragment : Fragment() {
         recyclerView.adapter = codeButtonAdapter
         binding.apply {
             clearButton.setOnClickListener {
-                viewModel.deleteAllCodes()
-                clearButtonDisabled()
+                showConfirmationDialogDelete()
             }
             modeSwitch.setOnClickListener { isChecked() }
             //Asignación de códigos a botones estáticos
@@ -143,6 +150,38 @@ class SettingsFragment : Fragment() {
             settingsDataStore.saveSelectedButtons(requireContext(), true, 8)
             settingsDataStore.saveSelectedButtons(requireContext(), true, 9)
         }
+    }
+
+    private fun showConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.delete_question))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                deleteButton()
+                lifecycleScope.launch {
+                    settingsDataStore.saveSelectedButtons(requireContext(), true, code.codeImage)
+                }
+            }
+            .show()
+    }
+
+    private fun showConfirmationDialogDelete() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.dialog_alert_title_delete_all))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                viewModel.deleteAllCodes()
+                clearButtonDisabled()
+            }
+            .show()
+    }
+
+    private fun deleteButton() {
+        viewModel.deleteCode(code)
     }
 
     override fun onDestroyView() {

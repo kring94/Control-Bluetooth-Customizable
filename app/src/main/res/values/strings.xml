@@ -15,4 +15,8 @@
     <string name="add">Add code</string>
     <string name="cancel">Cancel</string>
     <string name="clear_button">Clear</string>
+    <string name="delete_question">Are you sure you want to delete?</string>
+    <string name="no">CANCEL</string>
+    <string name="yes">OK</string>
+    <string name="dialog_alert_title_delete_all">Are you sure you want to delete all custom buttons?</string>
 </resources>

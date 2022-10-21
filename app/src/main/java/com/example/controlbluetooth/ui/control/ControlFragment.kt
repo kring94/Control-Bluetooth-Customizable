@@ -35,6 +35,8 @@ class ControlFragment : Fragment() {
         )
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +50,7 @@ class ControlFragment : Fragment() {
         recyclerView = binding.additionalHorizontalRv
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         val codeButtonAdapter = CodeButtonAdapter({
-            val text = "Prueba"
+            val text = "Command: ${it.codeButton}"
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
         }, Layout.CONTROL)
         viewModel.allCodes.observe(this.viewLifecycleOwner) { codes ->
@@ -57,6 +59,7 @@ class ControlFragment : Fragment() {
             }
         }
         recyclerView.adapter = codeButtonAdapter
+
         // Initialize SettingsDataStore
         settingsDataStore = SettingsDataStore(requireContext())
         settingsDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) { value ->

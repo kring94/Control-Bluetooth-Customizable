@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentSelectButtonBinding
@@ -47,7 +48,9 @@ class SelectButtonFragment : Fragment() {
         viewModel.allCodeLetter.observe(this.viewLifecycleOwner) {  letters ->
             listLetters = letters ?: emptyList()
         }
-
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_selectButtonFragment_to_navigation_settings)
+        }
         observeButtonWithDataStore()
         onClickButton()
     }
