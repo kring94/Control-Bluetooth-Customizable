@@ -7,13 +7,14 @@
     tools:context=".ui.bluetooth.BluetoothFragment">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="312dp"
-        android:layout_height="371dp"
-        android:src="@drawable/bluetooth"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_large"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/ic_bluetooth_searching"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:tint="@android:color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>
