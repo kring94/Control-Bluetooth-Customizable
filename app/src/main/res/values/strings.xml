@@ -19,4 +19,6 @@
     <string name="no">CANCEL</string>
     <string name="yes">OK</string>
     <string name="dialog_alert_title_delete_all">Are you sure you want to delete all custom buttons?</string>
+    <string name="bluetooth_confimation">It\'s needed turn on Bluetooth</string>
+    <string name="paired_devices">Paired Devices</string>
 </resources>
