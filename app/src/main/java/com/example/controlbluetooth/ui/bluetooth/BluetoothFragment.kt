@@ -17,13 +17,17 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.example.controlbluetooth.R
 import com.example.controlbluetooth.databinding.FragmentBluetoothBinding
+import com.example.controlbluetooth.model.Devices
+import com.example.controlbluetooth.ui.adapter.DevicesAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class BluetoothFragment : Fragment() {
     private var _binding: FragmentBluetoothBinding? = null
     private val binding get() = _binding!!
+
 
     private val REQUEST_ENABLE_BT = 1
 
@@ -44,42 +48,51 @@ class BluetoothFragment : Fragment() {
             ContextCompat.getSystemService(requireContext(), BluetoothManager::class.java)
         val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.adapter
 
-        if (bluetoothAdapter == null) {
-            Toast.makeText(context, "Este dispositivo no soporta BLUETOOTH", Toast.LENGTH_SHORT).show()
+        binding.scanButton.setOnClickListener {
+            if (bluetoothAdapter == null) {
+                Toast.makeText(context, "Este dispositivo no soporta BLUETOOTH", Toast.LENGTH_SHORT).show()
+            }
+            if (bluetoothAdapter?.isEnabled == false) {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+                // showConfirmationBluetoothDialog()
+            } else {
+                Toast.makeText(context, "Bluetooth already ON", Toast.LENGTH_SHORT).show()
+            }
         }
-        if (bluetoothAdapter?.isEnabled == false) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-           // showConfirmationBluetoothDialog()
-        }
+
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-        val pairedDevicesObserver = mutableListOf<String>()
-        val pairedDevicesMapObserver = mutableMapOf<String, String>()
+        val pairedDevicesObserver = ArrayList<Devices>()
 
         pairedDevices?.forEach { device ->
             val deviceName = device.name
             val deviceHardwareAddress = device.address // MAC address
-            pairedDevicesObserver.add(deviceName)
-            //pairedDevicesObserver.add(device.address)
-            pairedDevicesMapObserver[deviceName] = deviceHardwareAddress
-            Log.d("Bluetooth", pairedDevicesMapObserver.toString())
+            val devices = Devices(deviceName,deviceHardwareAddress)
+            pairedDevicesObserver.add(devices)
+            Log.d("Bluetooth", devices.name)
         }
 
-        var adapter: ArrayAdapter<*> = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,
-            pairedDevicesObserver
-        )
-        binding.listViewPairedDevices.adapter = adapter
-        val requestCode = 1;
+
+        binding.listViewPairedDevices.apply {
+            isClickable = true
+            adapter = DevicesAdapter(requireContext(), pairedDevicesObserver)
+            setOnItemClickListener { parent, view, position, id ->
+
+            }
+        }
+
+        val requestCode = 1
         val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
         }
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         registerReceiver(requireContext(), receiver, filter, requestCode)
 
-        binding.scanButton.setOnClickListener {
-            // Register for broadcasts when a device is discovered.
 
+        binding.scanButton.setOnLongClickListener {
+            // Register for broadcasts when a device is discovered.
             startActivityForResult(discoverableIntent, requestCode)
+            true
 
         }
 
@@ -87,7 +100,6 @@ class BluetoothFragment : Fragment() {
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private val receiver = object : BroadcastReceiver() {
-
         override fun onReceive(context: Context, intent: Intent) {
             val action: String = intent.action!!
             when(action) {
@@ -105,18 +117,6 @@ class BluetoothFragment : Fragment() {
     }
 
 
-    private fun showConfirmationBluetoothDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(android.R.string.dialog_alert_title))
-            .setMessage(getString(R.string.bluetooth_confimation))
-            .setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                BluetoothAdapter.ACTION_REQUEST_ENABLE
-            }
-            .show()
-    }
-    
 
     override fun onDestroyView() {
         super.onDestroyView()

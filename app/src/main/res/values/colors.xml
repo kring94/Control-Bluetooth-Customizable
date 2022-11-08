@@ -11,5 +11,6 @@
     <color name="secondary_light">#ff68e6ff</color>
 <!--    CODEs color-->
     <color name="codes">#FF393839</color>
+    <color name="background_devices">#eceff1</color>
 
 </resources>
