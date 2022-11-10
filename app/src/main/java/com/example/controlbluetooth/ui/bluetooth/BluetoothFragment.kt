@@ -1,5 +1,6 @@
 package com.example.controlbluetooth.ui.bluetooth
 
+import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -14,7 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.RECEIVER_VISIBLE_TO_INSTANT_APPS
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -29,15 +33,29 @@ class BluetoothFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-    private val REQUEST_ENABLE_BT = 1
+    // Activity for result for bluetooth activation
+    private val bluetoothActivation = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ activityResult ->
+        if(activityResult.resultCode == RESULT_OK){
+            Toast.makeText(context, "Bluetooth has been activated", Toast.LENGTH_SHORT).show()
+        }else {
+            Toast.makeText(context, "Bluetooth could not be activated", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Activity for result for bluetooth activation
+    private val bluetoothDiscoverable = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ activityResult ->
+        if(activityResult.resultCode > 0){
+            Toast.makeText(context, "Your device is now visible", Toast.LENGTH_SHORT).show()
+        }else {
+            Toast.makeText(context, "Your device couldn't set like visible", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         _binding = FragmentBluetoothBinding.inflate(inflater, container, false)
         return binding.root
-
-
 
     }
 
@@ -54,8 +72,7 @@ class BluetoothFragment : Fragment() {
             }
             if (bluetoothAdapter?.isEnabled == false) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-                // showConfirmationBluetoothDialog()
+                bluetoothActivation.launch(enableBtIntent)
             } else {
                 Toast.makeText(context, "Bluetooth already ON", Toast.LENGTH_SHORT).show()
             }
@@ -77,21 +94,20 @@ class BluetoothFragment : Fragment() {
             isClickable = true
             adapter = DevicesAdapter(requireContext(), pairedDevicesObserver)
             setOnItemClickListener { parent, view, position, id ->
-
+                    //TODO implementar la acción de conectar con el dispositivo seleccionado
             }
         }
 
-        val requestCode = 1
         val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
         }
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(requireContext(), receiver, filter, requestCode)
+        registerReceiver(requireContext(), receiver, filter, RECEIVER_VISIBLE_TO_INSTANT_APPS)
 
 
         binding.scanButton.setOnLongClickListener {
             // Register for broadcasts when a device is discovered.
-            startActivityForResult(discoverableIntent, requestCode)
+            bluetoothDiscoverable.launch(discoverableIntent)
             true
 
         }
@@ -115,7 +131,6 @@ class BluetoothFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onDestroyView() {
