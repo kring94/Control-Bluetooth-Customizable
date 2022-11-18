@@ -1,37 +1,45 @@
 package com.example.controlbluetooth.ui.bluetooth
 
+
+import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.content.BroadcastReceiver
-import android.content.Context
+import android.bluetooth.BluetoothSocket
 import android.content.Intent
-import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.RECEIVER_VISIBLE_TO_INSTANT_APPS
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import com.example.controlbluetooth.R
 import com.example.controlbluetooth.databinding.FragmentBluetoothBinding
 import com.example.controlbluetooth.model.Devices
 import com.example.controlbluetooth.ui.adapter.DevicesAdapter
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.IOException
+import java.util.*
 
 class BluetoothFragment : Fragment() {
     private var _binding: FragmentBluetoothBinding? = null
     private val binding get() = _binding!!
 
+    /*  TODO Variable Bluetooth  */
+    lateinit var mBtAdapter: BluetoothAdapter
+
+    companion object {
+        var m_myUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+        var m_bluetoothSocket: BluetoothSocket? = null
+
+        var m_isConnected: Boolean = false
+        lateinit var m_address: String
+    }
+    /*  TODO Variables Bluetooth*/
 
     // Activity for result for bluetooth activation
     private val bluetoothActivation = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ activityResult ->
@@ -62,6 +70,7 @@ class BluetoothFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Inicion de configuración Bluetooth
         val bluetoothManager: BluetoothManager? =
             ContextCompat.getSystemService(requireContext(), BluetoothManager::class.java)
         val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.adapter
@@ -72,12 +81,20 @@ class BluetoothFragment : Fragment() {
             }
             if (bluetoothAdapter?.isEnabled == false) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                //Verificación de permiso Bluetooth
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED){
+
+                }
                 bluetoothActivation.launch(enableBtIntent)
             } else {
                 Toast.makeText(context, "Bluetooth already ON", Toast.LENGTH_SHORT).show()
             }
         }
 
+        //Dispositivos vinculados
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         val pairedDevicesObserver = ArrayList<Devices>()
 
@@ -89,21 +106,31 @@ class BluetoothFragment : Fragment() {
             Log.d("Bluetooth", devices.name)
         }
 
-
         binding.listViewPairedDevices.apply {
             isClickable = true
             adapter = DevicesAdapter(requireContext(), pairedDevicesObserver)
-            setOnItemClickListener { parent, view, position, id ->
-                    //TODO implementar la acción de conectar con el dispositivo seleccionado
+            setOnItemClickListener { _, _, position, _ ->
+                Toast.makeText(context, pairedDevicesObserver[position].mac, Toast.LENGTH_SHORT).show()
+                    //TODO Acción de conectar con el dispositivo seleccionado
+                try{
+                    if(m_bluetoothSocket == null || !m_isConnected){
+                        val device: BluetoothDevice = bluetoothAdapter!!.getRemoteDevice(pairedDevicesObserver[position].mac)
+                        m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(
+                            m_myUUID)
+                        m_bluetoothSocket!!.connect()
+                    }
+                    Toast.makeText(requireContext(), "CONEXIÓN EXITOSA", Toast.LENGTH_LONG).show()
+                } catch (e: IOException ){
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "ERROR AL INTENTAR CONECTARSE", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
+        //Hacer que el dispositivo
         val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
         }
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(requireContext(), receiver, filter, RECEIVER_VISIBLE_TO_INSTANT_APPS)
-
 
         binding.scanButton.setOnLongClickListener {
             // Register for broadcasts when a device is discovered.
@@ -113,25 +140,6 @@ class BluetoothFragment : Fragment() {
         }
 
     }
-
-    // Create a BroadcastReceiver for ACTION_FOUND.
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action: String = intent.action!!
-            when(action) {
-                BluetoothDevice.ACTION_FOUND -> {
-                    // Discovery has found a device. Get the BluetoothDevice
-                    // object and its info from the Intent.
-                    val device: BluetoothDevice =
-                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)!!
-                    val deviceName = device.name
-                    val deviceHardwareAddress = device.address // MAC address
-                    Log.d("Bluetooth", deviceName)
-                }
-            }
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

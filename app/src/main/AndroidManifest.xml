@@ -5,13 +5,21 @@
     <!-- Declare this required feature if you want to make the app available to BLE-capable
     devices only.  If you want to make your app available to devices that don't support BLE,
     you should omit this in the manifest.  Instead, determine BLE capability by using
+
+
     PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+<!--    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>-->
 
     <!-- Needed only if your app looks for Bluetooth devices.
          If your app doesn't use Bluetooth scan results to derive physical
          location information, you can strongly assert that your app
          doesn't derive physical location. -->
+
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 
     <!-- Needed only if your app makes the device discoverable to Bluetooth
@@ -25,9 +33,9 @@
     <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
 <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".ui.ControlApplication"

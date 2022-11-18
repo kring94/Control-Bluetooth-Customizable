@@ -15,9 +15,11 @@ import com.example.controlbluetooth.data.SettingsDataStore
 import com.example.controlbluetooth.databinding.FragmentControlBinding
 import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.CodeButtonAdapter
+import com.example.controlbluetooth.ui.bluetooth.BluetoothFragment
 import com.example.controlbluetooth.ui.const.Layout
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
 import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
+import java.io.IOException
 
 
 class ControlFragment : Fragment() {
@@ -35,8 +37,6 @@ class ControlFragment : Fragment() {
         )
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +47,8 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         recyclerView = binding.additionalHorizontalRv
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         val codeButtonAdapter = CodeButtonAdapter({
@@ -75,6 +77,18 @@ class ControlFragment : Fragment() {
             uprightArrowImage.isVisible = isChecked
         }
     }
+
+    //Función para enviar datos
+    private fun sendCommand(input: String){
+        if(BluetoothFragment.m_bluetoothSocket != null){
+            try {
+                BluetoothFragment.m_bluetoothSocket!!.outputStream.write(input.toByteArray())
+            }catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
