@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.controlbluetooth.databinding.FragmentBluetoothBinding
 import com.example.controlbluetooth.model.Devices
 import com.example.controlbluetooth.ui.adapter.DevicesAdapter
@@ -29,7 +30,8 @@ class BluetoothFragment : Fragment() {
     private var _binding: FragmentBluetoothBinding? = null
     private val binding get() = _binding!!
 
-    /*  TODO Variable Bluetooth  */
+  //TODO Variable Bluetooth
+
     lateinit var mBtAdapter: BluetoothAdapter
 
     companion object {
@@ -39,7 +41,8 @@ class BluetoothFragment : Fragment() {
         var m_isConnected: Boolean = false
         lateinit var m_address: String
     }
-    /*  TODO Variables Bluetooth*/
+  //TODO Variables Bluetooth
+
 
     // Activity for result for bluetooth activation
     private val bluetoothActivation = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ activityResult ->
@@ -106,28 +109,12 @@ class BluetoothFragment : Fragment() {
             Log.d("Bluetooth", devices.name)
         }
 
-        binding.listViewPairedDevices.apply {
-            isClickable = true
-            adapter = DevicesAdapter(requireContext(), pairedDevicesObserver)
-            setOnItemClickListener { _, _, position, _ ->
-                Toast.makeText(context, pairedDevicesObserver[position].mac, Toast.LENGTH_SHORT).show()
-                    //TODO Acción de conectar con el dispositivo seleccionado
-                try{
-                    if(m_bluetoothSocket == null || !m_isConnected){
-                        val device: BluetoothDevice = bluetoothAdapter!!.getRemoteDevice(pairedDevicesObserver[position].mac)
-                        m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(
-                            m_myUUID)
-                        m_bluetoothSocket!!.connect()
-                    }
-                    Toast.makeText(requireContext(), "CONEXIÓN EXITOSA", Toast.LENGTH_LONG).show()
-                } catch (e: IOException ){
-                    e.printStackTrace()
-                    Toast.makeText(requireContext(), "ERROR AL INTENTAR CONECTARSE", Toast.LENGTH_LONG).show()
-                }
-            }
+        // RecyclerView de dispositivos bluetooth
+        if (bluetoothAdapter != null) {
+            initRecyclerView(pairedDevicesObserver,bluetoothAdapter)
         }
 
-        //Hacer que el dispositivo
+        //Hacer que el dispositivo sea visible para otros
         val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
         }
@@ -139,6 +126,43 @@ class BluetoothFragment : Fragment() {
 
         }
 
+        //Boton de enviar datos
+        binding.sendButton2.setOnClickListener {
+            var labelData = binding.labelBluetooth
+            sendCommand(labelData.text.toString())
+        }
+
+    }
+
+    private fun initRecyclerView(devicesBluetoothList:ArrayList<Devices>, bluetoothAdapter: BluetoothAdapter){
+        val recyclerView = binding.listViewPairedDevices
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = DevicesAdapter(devicesBluetoothList) { onDeviceSelected(it,bluetoothAdapter) }
+    }
+
+    private fun onDeviceSelected(device: Devices, bluetoothAdapter: BluetoothAdapter){
+        try{
+            if(m_bluetoothSocket == null || !m_isConnected){
+                val device: BluetoothDevice = bluetoothAdapter!!.getRemoteDevice(device.mac)
+                m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(
+                    m_myUUID)
+                m_bluetoothSocket!!.connect()
+            }
+            Toast.makeText(requireContext(), "CONEXIÓN EXITOSA", Toast.LENGTH_LONG).show()
+        } catch (e: IOException){
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "ERROR AL INTENTAR CONECTARSE", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun sendCommand(input: String) {
+        if(m_bluetoothSocket != null) {
+            try {
+                m_bluetoothSocket!!.outputStream.write(input.toByteArray())
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -146,3 +170,5 @@ class BluetoothFragment : Fragment() {
         _binding = null
     }
 }
+
+
