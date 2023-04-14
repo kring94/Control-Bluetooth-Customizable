@@ -58,11 +58,8 @@ class SettingsFragment : Fragment() {
         recyclerView = binding.additionalHorizontalConfRv
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         val codeButtonAdapter = CodeButtonAdapter({ codeSelected ->
-//            val text = "Prueba"
-//            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
             code = codeSelected
             showConfirmationDialog()
-
 
         }, Layout.SETTINGS)
         viewModel.allCodes.observe(this.viewLifecycleOwner) { codes ->

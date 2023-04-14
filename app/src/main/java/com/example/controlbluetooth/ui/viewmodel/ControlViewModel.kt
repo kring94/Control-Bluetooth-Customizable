@@ -19,7 +19,6 @@ class ControlViewModel(private val codesDao: CodesDao) : ViewModel() {
         _isChecked.value = checked
     }
 
-
     // TODO Inicio de implementación ROOM ########
 
     // Lista observable para la recuperación de todos los códigos y botones

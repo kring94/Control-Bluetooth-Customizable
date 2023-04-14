@@ -7,7 +7,14 @@ import com.example.controlbluetooth.R
 import com.example.controlbluetooth.model.Devices
 
 
-class DevicesAdapter(private val devicesBluetoothList:ArrayList<Devices>, private val onClickListener:(Devices)-> Unit) : RecyclerView.Adapter<DevicesViewHolder>(){
+class DevicesAdapter(private var devicesBluetoothList:MutableList<Devices> = mutableListOf(Devices("","")), private val onClickListener:(Devices)-> Unit) : RecyclerView.Adapter<DevicesViewHolder>(){
+
+    fun updateList(devicesBluetoothList:MutableList<Devices>) {
+        this.devicesBluetoothList = devicesBluetoothList
+        notifyDataSetChanged()
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevicesViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return DevicesViewHolder(layoutInflater.inflate(R.layout.device_item, parent, false))
@@ -21,3 +28,4 @@ class DevicesAdapter(private val devicesBluetoothList:ArrayList<Devices>, privat
     }
 
 }
+

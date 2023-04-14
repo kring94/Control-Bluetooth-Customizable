@@ -53,6 +53,7 @@ class ControlFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         val codeButtonAdapter = CodeButtonAdapter({
             val text = "Command: ${it.codeButton}"
+            sendCommand(it.codeButton) //Command sent by button
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
         }, Layout.CONTROL)
         viewModel.allCodes.observe(this.viewLifecycleOwner) { codes ->

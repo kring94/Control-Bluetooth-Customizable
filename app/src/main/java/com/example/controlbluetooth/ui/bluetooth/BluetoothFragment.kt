@@ -19,10 +19,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.controlbluetooth.databinding.FragmentBluetoothBinding
 import com.example.controlbluetooth.model.Devices
+import com.example.controlbluetooth.ui.ControlApplication
 import com.example.controlbluetooth.ui.adapter.DevicesAdapter
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModel
+import com.example.controlbluetooth.ui.viewmodel.ControlViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
@@ -30,18 +38,26 @@ class BluetoothFragment : Fragment() {
     private var _binding: FragmentBluetoothBinding? = null
     private val binding get() = _binding!!
 
-  //TODO Variable Bluetooth
+    private lateinit var devicesAdapter: DevicesAdapter
 
-    lateinit var mBtAdapter: BluetoothAdapter
+  //TODO Inicio Variable Bluetooth
+  private lateinit var bluetoothAdapter: BluetoothAdapter
 
     companion object {
-        var m_myUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+        val m_myUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         var m_bluetoothSocket: BluetoothSocket? = null
 
         var m_isConnected: Boolean = false
         lateinit var m_address: String
     }
-  //TODO Variables Bluetooth
+    //TODO Fin Variables Bluetooth
+
+    //ViewModel Instance
+    private val viewModel: ControlViewModel by activityViewModels {
+        ControlViewModelFactory(
+            (activity?.application as ControlApplication).database.codesDao()
+        )
+    }
 
 
     // Activity for result for bluetooth activation
@@ -73,18 +89,23 @@ class BluetoothFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicion de configuración Bluetooth
-        val bluetoothManager: BluetoothManager? =
+        /*val bluetoothManager: BluetoothManager? =
             ContextCompat.getSystemService(requireContext(), BluetoothManager::class.java)
-        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.adapter
+        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.adapter*/
+
+        val bluetoothManager = ContextCompat.getSystemService(requireContext(), BluetoothManager::class.java)
+        bluetoothAdapter = bluetoothManager?.adapter ?: run {
+            Toast.makeText(context, "This device does not support Bluetooth", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         binding.scanButton.setOnClickListener {
-            if (bluetoothAdapter == null) {
+           /* if (bluetoothAdapter == null) {
                 Toast.makeText(context, "Este dispositivo no soporta BLUETOOTH", Toast.LENGTH_SHORT).show()
-            }
+            }*/
             if (bluetoothAdapter?.isEnabled == false) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                //Verificación de permiso Bluetooth
+                //Verificación de permisos Bluetooth
                 if (ActivityCompat.checkSelfPermission(
                         requireContext(),
                         BLUETOOTH_CONNECT
@@ -99,7 +120,7 @@ class BluetoothFragment : Fragment() {
 
         //Dispositivos vinculados
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-        val pairedDevicesObserver = ArrayList<Devices>()
+        val pairedDevicesObserver = mutableListOf<Devices>()
 
         pairedDevices?.forEach { device ->
             val deviceName = device.name
@@ -110,48 +131,48 @@ class BluetoothFragment : Fragment() {
         }
 
         // RecyclerView de dispositivos bluetooth
-        if (bluetoothAdapter != null) {
-            initRecyclerView(pairedDevicesObserver,bluetoothAdapter)
-        }
-
-        //Hacer que el dispositivo sea visible para otros
-        val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
-            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
-        }
-
-        binding.scanButton.setOnLongClickListener {
-            // Register for broadcasts when a device is discovered.
-            bluetoothDiscoverable.launch(discoverableIntent)
-            true
-
-        }
+        val recyclerView = binding.listViewPairedDevices
+        devicesAdapter = DevicesAdapter(pairedDevicesObserver) { onDeviceSelected(it,bluetoothAdapter) }
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = devicesAdapter
+        //devicesAdapter.updateList(pairedDevicesObserver)
 
         //Boton de enviar datos
         binding.sendButton2.setOnClickListener {
-            var labelData = binding.labelBluetooth
+            val labelData = binding.labelBluetooth
             sendCommand(labelData.text.toString())
         }
 
     }
 
-    private fun initRecyclerView(devicesBluetoothList:ArrayList<Devices>, bluetoothAdapter: BluetoothAdapter){
-        val recyclerView = binding.listViewPairedDevices
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = DevicesAdapter(devicesBluetoothList) { onDeviceSelected(it,bluetoothAdapter) }
-    }
-
     private fun onDeviceSelected(device: Devices, bluetoothAdapter: BluetoothAdapter){
-        try{
-            if(m_bluetoothSocket == null || !m_isConnected){
-                val device: BluetoothDevice = bluetoothAdapter!!.getRemoteDevice(device.mac)
-                m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(
-                    m_myUUID)
-                m_bluetoothSocket!!.connect()
+        lifecycleScope.launch(Dispatchers.IO){
+            try{
+                if(m_bluetoothSocket == null || !m_isConnected){
+                    val device: BluetoothDevice = bluetoothAdapter.getRemoteDevice(device.mac)
+                    if (ActivityCompat.checkSelfPermission(
+                            requireContext(),
+                            BLUETOOTH_CONNECT
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return@launch
+                    }
+                    m_bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(
+                        m_myUUID)
+                    m_bluetoothSocket!!.connect()
+                }
+                Toast.makeText(requireContext(), "CONEXIÓN EXITOSA", Toast.LENGTH_LONG).show()
+            } catch (e: IOException){
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "ERROR AL INTENTAR CONECTARSE", Toast.LENGTH_LONG).show()
             }
-            Toast.makeText(requireContext(), "CONEXIÓN EXITOSA", Toast.LENGTH_LONG).show()
-        } catch (e: IOException){
-            e.printStackTrace()
-            Toast.makeText(requireContext(), "ERROR AL INTENTAR CONECTARSE", Toast.LENGTH_LONG).show()
         }
     }
 
